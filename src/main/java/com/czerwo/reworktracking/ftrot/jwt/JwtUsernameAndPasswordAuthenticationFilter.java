@@ -9,13 +9,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.crypto.SecretKey;
+import javax.json.Json;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObject;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
+
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -29,6 +34,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         this.authenticationManager = authenticationManager;
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
+
+        setFilterProcessesUrl("/signin");
     }
 
     @Override
@@ -66,7 +73,19 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(secretKey)
                 .compact();
 
-        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
+        response.setStatus(HttpServletResponse.SC_OK);
+
+
+//        JsonBuilderFactory builderFactory = Json.createBuilderFactory(Collections.emptyMap());
+//        JsonObject publicationDateObject = builderFactory.createObjectBuilder()
+//                .add("id", )
+//                .add("miesiąc", 9)
+//                .add("dzień", 13).build();
+
+
+        response.getWriter().write("{\"token\": " +  "\"" + jwtConfig.getTokenPrefix() + token + "\"}");
+        // JWT TOKEN send in header authorization
+        //response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
     }
 }
 
