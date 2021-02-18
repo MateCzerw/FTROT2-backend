@@ -1,11 +1,11 @@
 package com.czerwo.reworktracking.ftrot.models.data.Task;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
+import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Entity
 public class Task {
@@ -16,23 +16,23 @@ public class Task {
 
     private String name;
 
-    private double durationOfTask;
+    private double duration;
 
     private String description;
 
     @ManyToOne
-    @JoinColumn(name="work_package_id")
     private WorkPackage workPackage;
 
-    private LocalDateTime start;
-
-    private LocalDateTime end;
+    @ManyToOne
+    private Day day;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToOne
     private ApplicationUser assignedEngineer;
+
+    private boolean isInBacklog;
 
     public long getId() {
         return id;
@@ -50,12 +50,28 @@ public class Task {
         this.name = name;
     }
 
-    public double getDurationOfTask() {
-        return durationOfTask;
+    public boolean isInBacklog() {
+        return isInBacklog;
     }
 
-    public void setDurationOfTask(double durationOfTask) {
-        this.durationOfTask = durationOfTask;
+    public void setInBacklog(boolean inBacklog) {
+        isInBacklog = inBacklog;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public Day getDay() {
+        return day;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
     }
 
     public String getDescription() {
@@ -74,21 +90,6 @@ public class Task {
         this.workPackage = workPackage;
     }
 
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
 
     public Status getStatus() {
         return status;

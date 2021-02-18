@@ -6,7 +6,9 @@ import com.czerwo.reworktracking.ftrot.models.data.Task.Task;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class WorkPackage {
@@ -16,25 +18,56 @@ public class WorkPackage {
     private long id;
 
     @OneToOne
-    private ApplicationUser owner;
+    private ApplicationUser assignedTechnicalProjectManager;
 
     @OneToOne
     private ApplicationUser assignedLeadEngineer;
 
-    @OneToOne
-    private ApplicationUser assignedTeamLeader;
+    @ManyToOne
+    private Team team;
+
+    @OneToMany(mappedBy = "workPackage")
+    private Set<Task> tasks = new HashSet<>();
+
+    public ApplicationUser getAssignedTechnicalProjectManager() {
+        return assignedTechnicalProjectManager;
+    }
+
+    public void setAssignedTechnicalProjectManager(ApplicationUser assignedTechnicalProjectManager) {
+        this.assignedTechnicalProjectManager = assignedTechnicalProjectManager;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
 
     private String name;
 
     private String description;
 
-    private LocalDateTime start;
+    private LocalDateTime startDate;
 
-    private LocalDateTime end;
-
-
-    @OneToMany(mappedBy = "workPackage")
-    private List<Task> tasks = new ArrayList<>();
+    private LocalDateTime deadline;
 
     public long getId() {
         return id;
@@ -44,13 +77,6 @@ public class WorkPackage {
         this.id = id;
     }
 
-    public ApplicationUser getOwner() {
-        return owner;
-    }
-
-    public void setOwner(ApplicationUser owner) {
-        this.owner = owner;
-    }
 
     public ApplicationUser getAssignedLeadEngineer() {
         return assignedLeadEngineer;
@@ -60,21 +86,6 @@ public class WorkPackage {
         this.assignedLeadEngineer = assignedLeadEngineer;
     }
 
-    public ApplicationUser getAssignedTeamLeader() {
-        return assignedTeamLeader;
-    }
-
-    public void setAssignedTeamLeader(ApplicationUser assignedTeamLeader) {
-        this.assignedTeamLeader = assignedTeamLeader;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 
     public String getName() {
         return name;
@@ -92,23 +103,11 @@ public class WorkPackage {
         this.description = description;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 }
-
-
-
-

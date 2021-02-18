@@ -1,5 +1,7 @@
 package com.czerwo.reworktracking.ftrot.auth;
 
+import com.czerwo.reworktracking.ftrot.models.data.Team;
+import com.czerwo.reworktracking.ftrot.models.data.UserInfo;
 import com.czerwo.reworktracking.ftrot.security.ApplicationUserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +15,7 @@ public class ApplicationUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private String username;
     private  String password;
@@ -26,6 +28,11 @@ public class ApplicationUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private ApplicationUserRole applicationUseRole;
 
+    @OneToOne
+    private UserInfo userInfo;
+
+    @ManyToOne
+    private Team team;
 
     public ApplicationUser() {
     }
@@ -81,5 +88,61 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public ApplicationUserRole getApplicationUseRole() {
+        return applicationUseRole;
+    }
+
+    public void setApplicationUseRole(ApplicationUserRole applicationUseRole) {
+        this.applicationUseRole = applicationUseRole;
     }
 }
