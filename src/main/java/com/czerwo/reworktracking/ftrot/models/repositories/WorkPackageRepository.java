@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> {
 
-    @Query("SELECT e FROM WorkPackage e join fetch e.owner WHERE e.owner.username=?1")
-    List<WorkPackage> findAllByOwnerUsername(String username);
+    //@Query("SELECT e FROM WorkPackage e join fetch e.owner WHERE e.owner.username=?1")
+    //List<WorkPackage> findAllByOwnerUsername(String username);
 
 
 

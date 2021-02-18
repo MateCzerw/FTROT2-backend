@@ -42,10 +42,13 @@ public class TechnicalProjectManagerService {
 
     public List<WorkPackageDto> findAllWorkPackagesByOwnerUsername(String ownerUsername) {
 
-        return workPackageRepository.findAllByOwnerUsername(ownerUsername)
-                .stream()
-                .map(workPackageMapper::toDto)
-                .collect(Collectors.toList());
+        return null;
+
+//                workPackageRepository
+//                //.findAllByOwnerUsername(ownerUsername)
+//                .stream()
+//                .map(workPackageMapper::toDto)
+//                .collect(Collectors.toList());
     }
 
     public List<TaskDto> findAllTasksFromWorkPackage(String owner, long workPackageId) {
@@ -58,7 +61,7 @@ public class TechnicalProjectManagerService {
                 .findById(workPackageId)
                 .orElseThrow(() -> new WorkPackageNotFoundException(workPackageId));
 
-        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+//        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
 
         return taskRepository.findAllByWorkPackageId(workPackageId)
                 .stream()
@@ -72,7 +75,7 @@ public class TechnicalProjectManagerService {
                 .orElseThrow(() -> new UsernameNotFoundException(owner));
 
         WorkPackage workPackageEntity = workPackageMapper.toEntity(workpackageDto);
-        workPackageEntity.setOwner(ownerByUsername);
+//        workPackageEntity.setOwner(ownerByUsername);
 
         return mapAndSave(workPackageEntity);
     }
@@ -88,7 +91,7 @@ public class TechnicalProjectManagerService {
                 .findById(workPackageId)
                 .orElseThrow(() -> new WorkPackageNotFoundException(workPackageId));
 
-        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+//        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
 
         workPackageRepository.deleteById(workPackageId);
     }
@@ -103,7 +106,7 @@ public class TechnicalProjectManagerService {
                 .findById(workPackageDto.getId())
                 .orElseThrow(() -> new WorkPackageNotFoundException(workPackageDto.getId()));
 
-        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+//        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
 
         WorkPackage updatedWorkPackage = updateWorkPackage(workPackageById, workPackageDto);
 

@@ -20,12 +20,12 @@ public class WorkPackageMapper {
     public WorkPackageDto toDto(WorkPackage workPackage){
         WorkPackageDto dto = new WorkPackageDto();
 
-        dto.setOwner(workPackage.getOwner().getUsername());
+//        dto.setOwner(workPackage.getOwner().getUsername());
         dto.setDescription(workPackage.getDescription());
         dto.setId(workPackage.getId());
         dto.setName(workPackage.getName());
         dto.setLeadEngineer(workPackage.getAssignedLeadEngineer().getUsername());
-        dto.setTeamLeader(workPackage.getAssignedTeamLeader().getUsername());
+//        dto.setTeamLeader(workPackage.getAssignedTeamLeader().getUsername());
 
         return  dto;
     }
@@ -38,16 +38,16 @@ public class WorkPackageMapper {
         entity.setDescription(workPackageDto.getDescription());
 
         Optional<ApplicationUser> owner = applicationUserRepository.findByUsername(workPackageDto.getOwner());
-        owner.ifPresent(entity::setOwner);
+//        owner.ifPresent(entity::setOwner);
 
         Optional<ApplicationUser> leadEngineer = applicationUserRepository.findByUsername(workPackageDto.getLeadEngineer());
         leadEngineer.ifPresent(entity::setAssignedLeadEngineer);
 
         Optional<ApplicationUser> teamLeader = applicationUserRepository.findByUsername(workPackageDto.getOwner());
-        teamLeader.ifPresent(entity::setAssignedTeamLeader);
+//        teamLeader.ifPresent(entity::setAssignedTeamLeader);
 
-        entity.setStart(workPackageDto.getStart());
-        entity.setEnd(workPackageDto.getEnd());
+//        entity.setStart(workPackageDto.getStart());
+//        entity.setEnd(workPackageDto.getEnd());
 
 
         return entity;
