@@ -17,11 +17,11 @@ public class Week {
     @ManyToOne
     private ApplicationUser user;
 
-    @OneToMany(mappedBy = "week")
+    @OneToMany(mappedBy = "week", cascade = CascadeType.ALL)
     private Set<Day> days = new HashSet<>();
 
-    private String name;
-
+    private int weekNumber;
+    private int yearNumber;
 
     public Long getId() {
         return id;
@@ -43,15 +43,29 @@ public class Week {
         return days;
     }
 
-    public void setDays(Set<Day> days) {
-        this.days = days;
+    public void addDayToWeek(Day day){
+        days.add(day);
     }
 
-    public String getName() {
-        return name;
+    public void removeDayFromWeek(Day day) {
+        days.remove(day);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getWeekNumber() {
+        return weekNumber;
     }
+
+    public void setWeekNumber(int weekNumber) {
+        this.weekNumber = weekNumber;
+    }
+
+    public int getYearNumber() {
+        return yearNumber;
+    }
+
+    public void setYearNumber(int yearNumber) {
+        this.yearNumber = yearNumber;
+    }
+
+
 }

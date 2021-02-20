@@ -1,7 +1,6 @@
 package com.czerwo.reworktracking.ftrot.models.mappers;
 
-import com.czerwo.reworktracking.ftrot.models.data.Task.Status;
-import com.czerwo.reworktracking.ftrot.models.data.Task.Task;
+import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import org.springframework.stereotype.Service;
 

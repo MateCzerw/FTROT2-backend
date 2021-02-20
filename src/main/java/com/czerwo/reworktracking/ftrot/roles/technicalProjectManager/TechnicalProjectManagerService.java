@@ -1,4 +1,4 @@
-package com.czerwo.reworktracking.ftrot.services;
+package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;

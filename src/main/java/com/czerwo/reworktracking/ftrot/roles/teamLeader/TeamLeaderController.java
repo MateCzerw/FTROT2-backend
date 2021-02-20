@@ -1,4 +1,4 @@
-package com.czerwo.reworktracking.ftrot.controllers;
+package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,8 +1,7 @@
-package com.czerwo.reworktracking.ftrot.controllers;
+package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageDto;
-import com.czerwo.reworktracking.ftrot.services.TechnicalProjectManagerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

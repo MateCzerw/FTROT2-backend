@@ -1,7 +1,7 @@
 package com.czerwo.reworktracking.ftrot.controllers;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageDto;
-import com.czerwo.reworktracking.ftrot.services.TechnicalProjectManagerService;
+import com.czerwo.reworktracking.ftrot.roles.technicalProjectManager.TechnicalProjectManagerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

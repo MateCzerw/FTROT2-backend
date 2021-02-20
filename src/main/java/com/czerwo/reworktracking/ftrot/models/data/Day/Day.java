@@ -1,6 +1,6 @@
 package com.czerwo.reworktracking.ftrot.models.data.Day;
 
-import com.czerwo.reworktracking.ftrot.models.data.Task.Task;
+import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Week;
 
 import javax.persistence.*;
@@ -66,6 +66,8 @@ public class Day {
     public void setDayName(DayName dayName) {
         this.dayName = dayName;
     }
+
+
 
 
 }
