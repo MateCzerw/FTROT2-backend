@@ -4,6 +4,8 @@ import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotOwnerException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
@@ -80,37 +82,37 @@ public class TechnicalProjectManagerService {
     }
 
 
-//    public void deleteWorkPackage(String owner, Long workPackageId) {
-//
-//        ApplicationUser ownerByUsername = applicationUserRepository
-//                .findByUsername(owner)
-//                .orElseThrow(() -> new UsernameNotFoundException(owner));
-//
-//        WorkPackage workPackageById = workPackageRepository
-//                .findById(workPackageId)
-//                .orElseThrow(() -> new WorkPackageNotFoundException(workPackageId));
-//
-////        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
-//
-//        workPackageRepository.deleteById(workPackageId);
-//    }
+    public void deleteWorkPackage(String owner, Long workPackageId) {
 
-//    public WorkPackageTasksDto editWorkPackage(String owner, WorkPackageTasksDto workPackageTasksDto) {
-//
-//        ApplicationUser ownerByUsername = applicationUserRepository
-//                .findByUsername(owner)
-//                .orElseThrow(() -> new UsernameNotFoundException(owner));
-//
-//        WorkPackage workPackageById = workPackageRepository
-//                .findById(workPackageTasksDto.getId())
-//                .orElseThrow(() -> new WorkPackageNotFoundException(workPackageTasksDto.getId()));
-//
-////        if (!workPackageById.getOwner().getUsername().equals(owner)) throw new UserIsNotOwnerException();
-//
-//        WorkPackage updatedWorkPackage = updateWorkPackage(workPackageById, workPackageTasksDto);
-//
-//        return mapAndSave(updatedWorkPackage);
-//    }
+        ApplicationUser ownerByUsername = applicationUserRepository
+                .findByUsername(owner)
+                .orElseThrow(() -> new UsernameNotFoundException(owner));
+
+        WorkPackage workPackageById = workPackageRepository
+                .findById(workPackageId)
+                .orElseThrow(() -> new WorkPackageNotFoundException(workPackageId));
+
+        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+
+        workPackageRepository.deleteById(workPackageId);
+    }
+
+    public WorkPackageDto editWorkPackage(String owner, WorkPackageDto workPackageDto) {
+
+        ApplicationUser ownerByUsername = applicationUserRepository
+                .findByUsername(owner)
+                .orElseThrow(() -> new UsernameNotFoundException(owner));
+
+        WorkPackage workPackageById = workPackageRepository
+                .findById(workPackageDto.getId())
+                .orElseThrow(() -> new WorkPackageNotFoundException(workPackageDto.getId()));
+
+        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+
+        WorkPackage updatedWorkPackage = updateWorkPackage(workPackageById, workPackageDto);
+
+        return mapAndSave(updatedWorkPackage);
+    }
 
 
     private WorkPackageDto mapAndSave(WorkPackage workPackage) {
@@ -118,21 +120,22 @@ public class TechnicalProjectManagerService {
         return WorkPackageMapper.toDto(savedWorkPackage);
     }
 
-    private WorkPackage updateWorkPackage(WorkPackage entity, WorkPackageTasksDto dto) {
-        //TODO CHECK FOR NULLS
+    private WorkPackage updateWorkPackage(WorkPackage entity, WorkPackageDto dto) {
+
+        ApplicationUser leadEngineerByName = applicationUserRepository
+                .findByUsername(dto.getLeadEngineerUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(dto.getLeadEngineerUsername()));
+
+        Team teamByName = teamRepository
+                .findByName(dto.getTeamName())
+                .orElseThrow(() -> new RuntimeException());
+
         entity.setDescription(dto.getDescription());
         entity.setName(dto.getName());
-
-//        ApplicationUser leadEngineerByName = applicationUserRepository
-//                .findByUsername(dto.getLeadEngineer())
-//                .orElseThrow(() -> new UsernameNotFoundException(dto.getLeadEngineer()));
-//        entity.setAssignedLeadEngineer(leadEngineerByName);
-//
-//        ApplicationUser teamLeaderByName = applicationUserRepository
-//                .findByUsername(dto.getTeamLeader())
-//                .orElseThrow(() -> new UsernameNotFoundException(dto.getLeadEngineer()));
-//        entity.setAssignedLeadEngineer(leadEngineerByName);
-
+        entity.setDeadline(dto.getDeadline());
+        entity.setAssignedLeadEngineer(leadEngineerByName);
+        //todo check if lead engineer belongs to team
+        entity.setTeam(teamByName);
 
         return entity;
     }

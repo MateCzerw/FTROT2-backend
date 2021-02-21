@@ -39,21 +39,21 @@ public class TechnicalProjectManagerController {
 
         return ResponseEntity.created(location).body(createdWorkPackage);
     }
-//
-//    @DeleteMapping("/work-package/delete/{workPackageId}")
-//    public ResponseEntity<Void> deleteWorkPackage(Principal principal, @PathVariable Long workPackageId) {
-//        technicalProjectManagerService.deleteWorkPackage(principal.getName(), workPackageId);
-//
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @PutMapping("/work-package/edit/{workPackageId}")
-//    public ResponseEntity<WorkPackageTasksDto>  editWorkPackage(Principal principal, @PathVariable Long workPackageId, @RequestBody WorkPackageTasksDto workPackageTasksDto) {
-//        workPackageTasksDto.setId(workPackageId);
-//
-//        WorkPackageTasksDto updatedWorkPackage = technicalProjectManagerService.editWorkPackage(principal.getName(), workPackageTasksDto);
-//
-//        return ResponseEntity.ok().body(updatedWorkPackage);
-//    }
+
+    @DeleteMapping("/work-packages/{workPackageId}")
+    public ResponseEntity<Void> deleteWorkPackage(Principal principal, @PathVariable Long workPackageId) {
+        technicalProjectManagerService.deleteWorkPackage(principal.getName(), workPackageId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/work-packages/{workPackageId}")
+    public ResponseEntity<WorkPackageDto>  editWorkPackage(Principal principal, @PathVariable Long workPackageId, @RequestBody WorkPackageDto workPackageDto) {
+        workPackageDto.setId(workPackageId);
+
+        WorkPackageDto updatedWorkPackage = technicalProjectManagerService.editWorkPackage(principal.getName(), workPackageDto);
+
+        return ResponseEntity.ok().body(updatedWorkPackage);
+    }
 
 }

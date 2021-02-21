@@ -32,7 +32,7 @@ public class WorkPackage {
     @ManyToOne
     private Team team;
 
-    @OneToMany(mappedBy = "workPackage")
+    @OneToMany(mappedBy = "workPackage", cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
 
     public ApplicationUser getAssignedTechnicalProjectManager() {
