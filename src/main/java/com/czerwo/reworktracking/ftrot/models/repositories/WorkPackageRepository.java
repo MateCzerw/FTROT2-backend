@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> {
 
@@ -19,5 +20,9 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
     List<WorkPackage> findAllWorkPackagesByAssignedLeadEngineer(String username);
 
 
-
+    @Query("SELECT DISTINCT e FROM WorkPackage e " +
+            "LEFT JOIN FETCH e.tasks " +
+            "LEFT JOIN FETCH e.assignedLeadEngineer " +
+            "WHERE e.assignedLeadEngineer.username=?1")
+    Optional<WorkPackage> findByIdWithAssignedLeadEngineerAndTasks(Long workPackageId);
 }

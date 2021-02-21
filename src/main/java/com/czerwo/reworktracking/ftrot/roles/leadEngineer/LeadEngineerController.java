@@ -1,9 +1,8 @@
 package com.czerwo.reworktracking.ftrot.roles.leadEngineer;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,19 +23,12 @@ public class LeadEngineerController {
                 .findAllWorkPackagesByAssignedLeadEngineer(principal.getName());
     }
 
-    /*
-    TO GET ASSIGMENT WORKPACKAGES
+    @DeleteMapping("/work-packages/{workPackageId}/tasks/{taskId}")
+    public ResponseEntity<Void> deleteTask(Principal principal, @PathVariable Long workPackageId, @PathVariable Long taskId) {
+        leadEngineerService.deleteTask(principal.getName(), workPackageId, taskId);
 
-
-    TO ADD TASK FROM OWN WORKPACKAGES
-        TO SET TIME RESPONSIBLE FOR WORKPACKAGE
-
-    TO DELETE TASK FROM OWN WORKPACKAGES
-
-    TO EDIT TASK FROM OWN WORKPACKAGES
-
-     */
-
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
