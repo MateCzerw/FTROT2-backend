@@ -6,6 +6,7 @@ import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Day.DayName;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Week;
+import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.repositories.DayRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WeekRepository;
@@ -70,6 +71,21 @@ public class EngineerService {
                 .collect(Collectors.toList());
 
     }
+
+
+    public int getTotalDurationOfAssignedTasksInCurrentWeek(String username, int weekNumber, int yearNumber){
+
+       ApplicationUser userByUsername = applicationUserRepository
+                .findByUsername(username).orElseThrow(() -> new RuntimeException());
+
+        weekRepository
+                .findByWeekNumberAndYearNumberAndUser(weekNumber, yearNumber, userByUsername)
+                .orElseGet(() -> createWeek(userByUsername, weekNumber, yearNumber));
+
+        return taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(userByUsername.getId(), weekNumber, yearNumber);
+    }
+
+
 
 
     public WeekDto getUserWeekWithTasks(String username, int weekNumber, int yearNumber){

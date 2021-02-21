@@ -1,6 +1,6 @@
 package com.czerwo.reworktracking.ftrot.roles.engineer;
 
-import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
+import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 
 import java.time.LocalDate;
 import java.util.LinkedList;

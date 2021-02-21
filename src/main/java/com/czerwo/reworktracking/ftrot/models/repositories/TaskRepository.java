@@ -11,6 +11,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("Select count(e) from Task e where e.assignedEngineer.id=?1 and e.status < 1")
     int countTaskByAssignedEngineerIdAndStatusIsNotStatusFinished(long id);
 
+    @Query("Select coalesce(sum(e.duration), 0) from Task e where e.assignedEngineer.id=?1 and e.day.week.weekNumber =?2 and e.day.week.yearNumber =?3")
+    int sumTasksByAssignerEngineerIdAndWeekAndYear(long id, int weekNumber, int yearNumber);
+
+
     // @Query("Select e from ApplicationUser e join fetch e.userInfo where e.id=?1")
 
 

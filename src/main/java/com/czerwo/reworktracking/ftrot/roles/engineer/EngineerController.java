@@ -39,6 +39,18 @@ public class EngineerController {
         return ResponseEntity.ok().body(tasksForDay);
     }
 
+    @GetMapping("/board/graph-details")
+    public ResponseEntity<Integer> getTotalDurationOfAssignedTasksInCurrentWeek(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+
+        Integer assignedTasksDuration = engineerService
+                .getTotalDurationOfAssignedTasksInCurrentWeek(
+                        principal.getName(),
+                        weekNumber,
+                        yearNumber);
+
+        return ResponseEntity.ok().body(assignedTasksDuration);
+    }
+
     @GetMapping("/tasks")
     public ResponseEntity<WeekDto> getUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
 
@@ -46,6 +58,7 @@ public class EngineerController {
 
         return ResponseEntity.ok().body(userWeekWithTasks);
     }
+
 
     // LIST OF TASKS TO DO
 

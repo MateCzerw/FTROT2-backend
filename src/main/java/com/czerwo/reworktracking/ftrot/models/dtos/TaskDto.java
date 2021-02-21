@@ -1,30 +1,19 @@
 package com.czerwo.reworktracking.ftrot.models.dtos;
 
-import java.time.LocalDateTime;
-
 public class TaskDto {
 
-    private long id;
-
+    private Long id;
     private String name;
-
-    private double durationOfTask;
-
     private String description;
+    private double duration;
+    private double status;
+    private String workPackageName;
 
-    private LocalDateTime start;
-
-    private LocalDateTime end;
-
-    private String status;
-
-    private String assignedEngineer;
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,14 +25,6 @@ public class TaskDto {
         this.name = name;
     }
 
-    public double getDurationOfTask() {
-        return durationOfTask;
-    }
-
-    public void setDurationOfTask(double durationOfTask) {
-        this.durationOfTask = durationOfTask;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -52,35 +33,27 @@ public class TaskDto {
         this.description = description;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    public double getDuration() {
+        return duration;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public String getWorkPackageName() {
+        return workPackageName;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setWorkPackageName(String workPackageName) {
+        this.workPackageName = workPackageName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+    public void setStatus(double status) {
         this.status = status;
     }
 
-    public String getAssignedEngineer() {
-        return assignedEngineer;
-    }
-
-    public void setAssignedEngineer(String assignedEngineer) {
-        this.assignedEngineer = assignedEngineer;
+    public double getStatus() {
+        return status;
     }
 }

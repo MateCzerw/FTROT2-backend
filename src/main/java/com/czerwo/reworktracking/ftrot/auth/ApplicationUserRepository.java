@@ -1,7 +1,5 @@
 package com.czerwo.reworktracking.ftrot.auth;
 
-import com.czerwo.reworktracking.ftrot.models.data.UserDetails;
-import com.czerwo.reworktracking.ftrot.models.data.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
