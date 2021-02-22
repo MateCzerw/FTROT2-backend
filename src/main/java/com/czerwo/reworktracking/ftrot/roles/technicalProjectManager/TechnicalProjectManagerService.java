@@ -115,10 +115,7 @@ public class TechnicalProjectManagerService {
     }
 
 
-    private WorkPackageDto mapAndSave(WorkPackage workPackage) {
-        WorkPackage savedWorkPackage = workPackageRepository.save(workPackage);
-        return WorkPackageMapper.toDto(savedWorkPackage);
-    }
+
 
     private WorkPackage updateWorkPackage(WorkPackage entity, WorkPackageDto dto) {
 
@@ -138,6 +135,11 @@ public class TechnicalProjectManagerService {
         entity.setTeam(teamByName);
 
         return entity;
+    }
+
+    private WorkPackageDto mapAndSave(WorkPackage workPackage) {
+        WorkPackage savedWorkPackage = workPackageRepository.save(workPackage);
+        return WorkPackageMapper.toDto(savedWorkPackage);
     }
 
 

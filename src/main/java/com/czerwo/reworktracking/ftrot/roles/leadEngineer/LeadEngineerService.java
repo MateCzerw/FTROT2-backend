@@ -59,4 +59,64 @@ public class LeadEngineerService {
 
         taskRepository.deleteById(taskId);
     }
+
+    public TaskDto createTask(String leadEngineerUsername, TaskDto taskDto, long workPackageId) {
+
+        WorkPackage workPackageById = workPackageRepository
+                .findByIdWithAssignedLeadEngineer(workPackageId)
+                .orElseThrow(() -> new RuntimeException());
+
+        ApplicationUser leadEngineerByUsername =
+                applicationUserRepository
+                .findByUsername(leadEngineerUsername)
+                .orElseThrow(() -> new UsernameNotFoundException(leadEngineerUsername));
+
+        if(workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId()) throw new RuntimeException();
+
+        Task taskEntity = new Task();
+        taskEntity.setDescription(taskDto.getDescription());
+        taskEntity.setName(taskDto.getName());
+        taskEntity.setDuration(taskDto.getDuration());
+        taskEntity.setWorkPackage(workPackageById);
+        taskEntity.setStatus(0);
+
+        return mapAndSave(taskEntity);
+
+    }
+
+    public TaskDto editTask(String leadEngineerUsername, TaskDto taskDto, Long workPackageId) {
+        WorkPackage workPackageById = workPackageRepository
+                .findByIdWithAssignedLeadEngineerAndTasks(workPackageId)
+                .orElseThrow(() -> new RuntimeException());
+
+        ApplicationUser leadEngineerByUsername =
+                applicationUserRepository
+                        .findByUsername(leadEngineerUsername)
+                        .orElseThrow(() -> new UsernameNotFoundException(leadEngineerUsername));
+        if(workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId()) throw new RuntimeException();
+
+        boolean isTaskAssignedToWorkPackage = workPackageById
+                .getTasks()
+                .stream()
+                .anyMatch(task -> task.getId() == taskDto.getId());
+
+        if(!isTaskAssignedToWorkPackage) throw new RuntimeException();
+
+        Task entity = taskRepository.findById(taskDto.getId()).orElseThrow(() -> new RuntimeException());
+        entity.setName(taskDto.getName());
+        entity.setDuration(taskDto.getDuration());
+        entity.setDescription(taskDto.getDescription());
+
+        return mapAndSave(entity);
+
+    }
+
+
+    private TaskDto mapAndSave(Task task) {
+        Task savedTask = taskRepository.save(task);
+        return TaskMapper.toDto(savedTask);
+    }
+
+
+
 }

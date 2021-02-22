@@ -23,6 +23,11 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
     @Query("SELECT DISTINCT e FROM WorkPackage e " +
             "LEFT JOIN FETCH e.tasks " +
             "LEFT JOIN FETCH e.assignedLeadEngineer " +
-            "WHERE e.assignedLeadEngineer.username=?1")
+            "WHERE e.id=?1")
     Optional<WorkPackage> findByIdWithAssignedLeadEngineerAndTasks(Long workPackageId);
+
+    @Query("SELECT e FROM WorkPackage e " +
+            "JOIN FETCH e.assignedLeadEngineer " +
+            "WHERE e.id=?1")
+    Optional<WorkPackage> findByIdWithAssignedLeadEngineer(long workPackageId);
 }
