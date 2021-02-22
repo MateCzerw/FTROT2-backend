@@ -1,26 +1,31 @@
 package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
+@RequestMapping("/api/v1/team-leader")
 public class TeamLeaderController {
 
-    /*
-    GET LIST OF TASKS TO DO BY EMPLOYEE
+    private final TeamLeaderService teamLeaderService;
 
-    CHECK STATUS OF WORK LOAD FOR EACH EMPLOYEE
+    public TeamLeaderController(TeamLeaderService teamLeaderService) {
+        this.teamLeaderService = teamLeaderService;
+    }
 
-    TO ASSIGN TASK FOR EACH EMPLOYEE
+    @GetMapping("/board/user-info")
+    public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
 
-    TO EDIT TASK ASSIGMENT FOR EACH TASK OF SUBORDINATE EMPLOYEE
 
-    ?? TO DELETE TASK CREATED BY LEAD ENGINEER??
+        UserInfoDto userInfoDto = teamLeaderService.getUserInfoByUsername(principal.getName());
 
-    TO CHECK STATUS OF WORK PACKAGES OF SUBORDINATE EMPLOYEES
+        return ResponseEntity.ok().body(userInfoDto);
+    }
 
-    TO CREATE TASK FOR EMPLOYEES
-
-     */
 
 
 

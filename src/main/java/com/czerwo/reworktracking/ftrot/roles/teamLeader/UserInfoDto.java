@@ -8,7 +8,7 @@ class UserInfoDto {
     private String surname;
     private String team;
     private String role;
-    private int finishedWorkPackages;
+    private int teamMembers;
     private int unfinishedWorkPackages;
     private String supervisor;
     private LocalDate joinedAt;
@@ -49,12 +49,12 @@ class UserInfoDto {
         this.role = role;
     }
 
-    public int getFinishedWorkPackages() {
-        return finishedWorkPackages;
+    public int getTeamMembers() {
+        return teamMembers;
     }
 
-    public void setFinishedWorkPackages(int finishedWorkPackages) {
-        this.finishedWorkPackages = finishedWorkPackages;
+    public void setTeamMembers(int teamMembers) {
+        this.teamMembers = teamMembers;
     }
 
     public int getUnfinishedWorkPackages() {

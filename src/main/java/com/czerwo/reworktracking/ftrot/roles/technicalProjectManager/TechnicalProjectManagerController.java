@@ -22,7 +22,6 @@ public class TechnicalProjectManagerController {
     @GetMapping("/board/user-info")
     public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
 
-
         UserInfoDto userInfoDto = technicalProjectManagerService.getUserInfoByUsername(principal.getName());
 
         return ResponseEntity.ok().body(userInfoDto);

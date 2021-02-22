@@ -33,9 +33,10 @@ public class Team {
         this.teamLeader = teamLeader;
     }
 
-//    public Set<ApplicationUser> getUsers() {
-//        return users;
-//    }
+    //todo rework of get users into immutable set
+    public Set<ApplicationUser> getUsers() {
+        return users;
+    }
 //
 //    public void setUsers(Set<ApplicationUser> users) {
 //        this.users = users;

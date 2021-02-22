@@ -24,8 +24,12 @@ class UserInfoMapper {
         //todo
         dto.setUnfinishedWorkPackages(60);
         dto.setJoinedAt(user.map(ApplicationUser::getUserInfo).map(UserInfo::getJoinedAt).orElseThrow(() -> new RuntimeException()));
-        //todo
-        dto.setFinishedWorkPackages(32);
+        dto.setTeamMembers((int) user
+                .map(ApplicationUser::getTeam)
+                .map(Team::getUsers)
+                        .orElseThrow(() -> new RuntimeException())
+                        .stream()
+                        .count());
         dto.setTeam(user.map(ApplicationUser::getTeam).map(Team::getName).orElseThrow(() -> new RuntimeException()));
 
 
