@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,11 +52,11 @@ public class LeadEngineerService {
                 .orElseThrow(() -> new RuntimeException());
 
         //todo to check if user is an assigned lead engineer
-        if(!workPackage.getAssignedLeadEngineer().getUsername().equals(username)) throw new RuntimeException();
+        if (!workPackage.getAssignedLeadEngineer().getUsername().equals(username)) throw new RuntimeException();
         //todo to check if task belongs to workpackage
         boolean isTaskWithinWorkPackage = workPackage.getTasks().stream().anyMatch(task -> task.getId() == taskId);
 
-        if(!isTaskWithinWorkPackage) throw new RuntimeException();
+        if (!isTaskWithinWorkPackage) throw new RuntimeException();
 
         taskRepository.deleteById(taskId);
     }
@@ -68,10 +69,11 @@ public class LeadEngineerService {
 
         ApplicationUser leadEngineerByUsername =
                 applicationUserRepository
-                .findByUsername(leadEngineerUsername)
-                .orElseThrow(() -> new UsernameNotFoundException(leadEngineerUsername));
+                        .findByUsername(leadEngineerUsername)
+                        .orElseThrow(() -> new UsernameNotFoundException(leadEngineerUsername));
 
-        if(workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId()) throw new RuntimeException();
+        if (workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId())
+            throw new RuntimeException();
 
         Task taskEntity = new Task();
         taskEntity.setDescription(taskDto.getDescription());
@@ -93,14 +95,15 @@ public class LeadEngineerService {
                 applicationUserRepository
                         .findByUsername(leadEngineerUsername)
                         .orElseThrow(() -> new UsernameNotFoundException(leadEngineerUsername));
-        if(workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId()) throw new RuntimeException();
+        if (workPackageById.getAssignedLeadEngineer().getId() != leadEngineerByUsername.getId())
+            throw new RuntimeException();
 
         boolean isTaskAssignedToWorkPackage = workPackageById
                 .getTasks()
                 .stream()
                 .anyMatch(task -> task.getId() == taskDto.getId());
 
-        if(!isTaskAssignedToWorkPackage) throw new RuntimeException();
+        if (!isTaskAssignedToWorkPackage) throw new RuntimeException();
 
         Task entity = taskRepository.findById(taskDto.getId()).orElseThrow(() -> new RuntimeException());
         entity.setName(taskDto.getName());
@@ -118,5 +121,12 @@ public class LeadEngineerService {
     }
 
 
+    public UserInfoDto getUserInfoByUsername(String username) {
+
+        Optional<ApplicationUser> userByUsername = applicationUserRepository
+                .findByUsernameWithTeamAndUserInfo(username);
+
+        return UserInfoMapper.toDto(userByUsername);
+    }
 
 }

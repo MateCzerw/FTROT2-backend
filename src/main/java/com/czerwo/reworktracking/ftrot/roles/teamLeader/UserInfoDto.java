@@ -1,4 +1,4 @@
-package com.czerwo.reworktracking.ftrot.roles.engineer;
+package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
 import java.time.LocalDate;
 
@@ -8,8 +8,8 @@ class UserInfoDto {
     private String surname;
     private String team;
     private String role;
-    private double reworkRatio;
-    private int unfinishedTasks;
+    private int finishedWorkPackages;
+    private int unfinishedWorkPackages;
     private String supervisor;
     private LocalDate joinedAt;
 
@@ -49,20 +49,20 @@ class UserInfoDto {
         this.role = role;
     }
 
-    public double getReworkRatio() {
-        return reworkRatio;
+    public int getFinishedWorkPackages() {
+        return finishedWorkPackages;
     }
 
-    public void setReworkRatio(double reworkRatio) {
-        this.reworkRatio = reworkRatio;
+    public void setFinishedWorkPackages(int finishedWorkPackages) {
+        this.finishedWorkPackages = finishedWorkPackages;
     }
 
-    public int getUnfinishedTasks() {
-        return unfinishedTasks;
+    public int getUnfinishedWorkPackages() {
+        return unfinishedWorkPackages;
     }
 
-    public void setUnfinishedTasks(int unfinishedTasks) {
-        this.unfinishedTasks = unfinishedTasks;
+    public void setUnfinishedWorkPackages(int unfinishedWorkPackages) {
+        this.unfinishedWorkPackages = unfinishedWorkPackages;
     }
 
     public String getSupervisor() {

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +41,15 @@ public class TechnicalProjectManagerService {
         this.teamRepository = teamRepository;
         this.workPackageTasksMapper = workPackageTasksMapper;
         this.taskMapper = taskMapper;
+    }
+
+    public UserInfoDto getUserInfoByUsername(String username) {
+
+        Optional<ApplicationUser> userByUsername = applicationUserRepository
+                .findByUsernameWithTeamAndUserInfo(username);
+
+        return UserInfoMapper.toDto(userByUsername);
+
     }
 
 

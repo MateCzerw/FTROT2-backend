@@ -19,6 +19,15 @@ public class TechnicalProjectManagerController {
         this.technicalProjectManagerService = technicalProjectManagerService;
     }
 
+    @GetMapping("/board/user-info")
+    public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
+
+
+        UserInfoDto userInfoDto = technicalProjectManagerService.getUserInfoByUsername(principal.getName());
+
+        return ResponseEntity.ok().body(userInfoDto);
+    }
+
 
 
     @GetMapping("/work-packages")

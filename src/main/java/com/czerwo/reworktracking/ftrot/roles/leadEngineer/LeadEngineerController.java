@@ -19,6 +19,15 @@ public class LeadEngineerController {
         this.leadEngineerService = leadEngineerService;
     }
 
+
+    @GetMapping("/board/user-info")
+    public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
+
+        UserInfoDto userInfoDto = leadEngineerService.getUserInfoByUsername(principal.getName());
+
+        return ResponseEntity.ok().body(userInfoDto);
+    }
+
     @GetMapping("/work-packages")
     public List<WorkPackageTasksDto> findAllWorkPackagesByAssignedLeadEngineer(Principal principal) {
         return leadEngineerService
