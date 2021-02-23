@@ -5,6 +5,7 @@ import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
+import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.TeamRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WorkPackageRepository;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +23,14 @@ public class TeamLeaderService {
     private final WorkPackageRepository workPackageRepository;
     private final WorkPackageSimplifiedMapper workPackageSimplifiedMapper;
     private final TeamRepository teamRepository;
+    private final TaskRepository taskRepository;
 
-    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository) {
+    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository, TaskRepository taskRepository) {
         this.applicationUserRepository = applicationUserRepository;
         this.workPackageRepository = workPackageRepository;
         this.workPackageSimplifiedMapper = workPackageSimplifiedMapper;
         this.teamRepository = teamRepository;
+        this.taskRepository = taskRepository;
     }
 
     public UserInfoDto getUserInfoByUsername(String username) {
@@ -53,5 +56,20 @@ public class TeamLeaderService {
                 .collect(Collectors.toList());
 
         return workPackagesDto;
+    }
+
+    public int getAssignedHoursForCurrentWeek(String username, int week, int year) {
+
+        List<ApplicationUser> engineers = applicationUserRepository
+                .findEngineersAndLeadEngineersFromTeamByTeamLeaderUsername(username);
+
+        int assignedHours = engineers
+                .stream()
+                .map(e -> taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(e.getId(), week, year))
+                .collect(Collectors.summingInt(Integer::intValue));
+
+
+        return assignedHours;
+
     }
 }

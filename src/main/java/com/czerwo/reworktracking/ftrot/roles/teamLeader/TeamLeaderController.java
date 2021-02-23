@@ -38,6 +38,16 @@ public class TeamLeaderController {
         return ResponseEntity.ok().body(workPackageSimplifiedDtos);
     }
 
+    @GetMapping("/board/assigned-work-hours")
+    public ResponseEntity<Integer> statusOfAssignedWorkHoursForCurrentWeek(Principal principal){
+
+        int assignedHours =
+                teamLeaderService
+                        .getAssignedHoursForCurrentWeek(principal.getName(), 1, 2021);
+
+        return ResponseEntity.ok().body(assignedHours);
+    }
+
 
 
 
