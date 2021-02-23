@@ -4,6 +4,7 @@ import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
@@ -169,5 +170,19 @@ public class TechnicalProjectManagerService {
                 .collect(Collectors.toList());
 
         return workPackagesDto;
+    }
+
+    public WorkPackageStatusDto getWorkPackagesStatus(String username) {
+
+        WorkPackageStatusDto workPackageStatusDto = new WorkPackageStatusDto();
+
+        List<WorkPackage> workPackages = workPackageRepository
+                .findAllByOwnerUsernameWithTasks(username);
+        //Todo
+        workPackageStatusDto.setOnTime(5);
+        workPackageStatusDto.setStopped(5);
+        workPackageStatusDto.setDelayed(5);
+
+        return workPackageStatusDto;
     }
 }

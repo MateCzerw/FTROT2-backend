@@ -5,6 +5,7 @@ import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageTasksMapper;
@@ -41,7 +42,7 @@ public class LeadEngineerService {
     }
 
     public List<WorkPackageTasksDto> findAllWorkPackagesByAssignedLeadEngineer(String username) {
-        return workPackageRepository.findAllWorkPackagesByAssignedLeadEngineer(username)
+        return workPackageRepository.findAllWorkPackagesByAssignedLeadEngineerWithTasks(username)
                 .stream()
                 .map((workPackage) -> workPackageTasksMapper.toDto(workPackage, workPackage.getTasks()
                         .stream()
@@ -151,4 +152,18 @@ public class LeadEngineerService {
     }
 
 
+    public WorkPackageStatusDto getWorkPackagesStatus(String username) {
+
+        WorkPackageStatusDto workPackageStatusDto = new WorkPackageStatusDto();
+
+        List<WorkPackage> workPackages = workPackageRepository
+                .findAllWorkPackagesByAssignedLeadEngineerWithTasks(username);
+
+        //Todo
+        workPackageStatusDto.setOnTime(5);
+        workPackageStatusDto.setStopped(5);
+        workPackageStatusDto.setDelayed(5);
+
+        return workPackageStatusDto;
+    }
 }

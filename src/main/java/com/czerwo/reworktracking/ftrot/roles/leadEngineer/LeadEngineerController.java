@@ -1,6 +1,7 @@
 package com.czerwo.reworktracking.ftrot.roles.leadEngineer;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,16 @@ public class LeadEngineerController {
                         .getTopFiveWorkPackageWithClosestDeadline(principal.getName());
 
         return ResponseEntity.ok().body(workPackageSimplifiedDtos);
+    }
+
+    @GetMapping("/board/work-packages-status")
+    public ResponseEntity<WorkPackageStatusDto> getWorkPackagesStatus(Principal principal){
+
+        WorkPackageStatusDto workPackageStatusDto =
+                leadEngineerService
+                        .getWorkPackagesStatus(principal.getName());
+
+        return ResponseEntity.ok().body(workPackageStatusDto);
     }
 
     @GetMapping("/work-packages")

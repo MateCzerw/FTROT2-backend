@@ -19,7 +19,7 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
     @Query("SELECT DISTINCT e FROM WorkPackage e " +
             "LEFT JOIN FETCH e.tasks " +
             "WHERE e.assignedLeadEngineer.username=?1")
-    List<WorkPackage> findAllWorkPackagesByAssignedLeadEngineer(String username);
+    List<WorkPackage> findAllWorkPackagesByAssignedLeadEngineerWithTasks(String username);
 
 
     @Query("SELECT DISTINCT e FROM WorkPackage e " +
@@ -50,4 +50,7 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
             "AND e.isFinished=false " +
             "ORDER BY e.deadline ASC")
     List<WorkPackage> findTop5ByTeamIdOrderByDeadlineAsc(Long id, Pageable topFive);
+
+
+
 }

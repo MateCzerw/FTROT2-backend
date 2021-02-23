@@ -1,6 +1,7 @@
 package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,16 @@ public class TechnicalProjectManagerController {
                         .getTopFiveWorkPackagesWithClosestDeadline(principal.getName());
 
         return ResponseEntity.ok().body(workPackageSimplifiedDtos);
+    }
+
+    @GetMapping("/board/work-packages-status")
+    public ResponseEntity<WorkPackageStatusDto> getWorkPackagesStatus(Principal principal){
+
+        WorkPackageStatusDto workPackageStatusDto =
+                technicalProjectManagerService
+                        .getWorkPackagesStatus(principal.getName());
+
+        return ResponseEntity.ok().body(workPackageStatusDto);
     }
 
 
