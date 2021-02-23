@@ -35,6 +35,10 @@ public class WorkPackage {
     @OneToMany(mappedBy = "workPackage", cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
 
+    private boolean isFinished;
+
+    private double status;
+
     public ApplicationUser getAssignedTechnicalProjectManager() {
         return assignedTechnicalProjectManager;
     }
@@ -115,5 +119,23 @@ public class WorkPackage {
         this.startDate = startDate;
     }
 
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public double getStatus() {
+        return status;
+    }
+
+    public void setStatus(double status) {
+        this.status = status;
+    }
 }

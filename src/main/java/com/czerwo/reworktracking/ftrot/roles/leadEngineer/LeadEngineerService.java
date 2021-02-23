@@ -4,12 +4,18 @@ import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WorkPackageRepository;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +28,16 @@ public class LeadEngineerService {
     private final TaskRepository taskRepository;
     private final ApplicationUserRepository applicationUserRepository;
     private final WorkPackageTasksMapper workPackageTasksMapper;
+    private final WorkPackageSimplifiedMapper workPackageSimplifiedMapper;
 
 
-    public LeadEngineerService(WorkPackageRepository workPackageRepository, TaskRepository taskRepository, ApplicationUserRepository applicationUserRepository, WorkPackageTasksMapper workPackageTasksMapper) {
+    public LeadEngineerService(WorkPackageRepository workPackageRepository, TaskRepository taskRepository, ApplicationUserRepository applicationUserRepository, WorkPackageTasksMapper workPackageTasksMapper, WorkPackageSimplifiedMapper workPackageSimplifiedMapper) {
         this.workPackageRepository = workPackageRepository;
         this.taskRepository = taskRepository;
         this.applicationUserRepository = applicationUserRepository;
         this.workPackageTasksMapper = workPackageTasksMapper;
+
+        this.workPackageSimplifiedMapper = workPackageSimplifiedMapper;
     }
 
     public List<WorkPackageTasksDto> findAllWorkPackagesByAssignedLeadEngineer(String username) {
@@ -128,5 +137,18 @@ public class LeadEngineerService {
 
         return UserInfoMapper.toDto(userByUsername);
     }
+
+    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackageWithClosestDeadline(String username){
+
+        Pageable topFive = PageRequest.of(0, 5);
+
+        List<WorkPackageSimplifiedDto> workPackagesDto = workPackageRepository.findTop5ByAssignedLeadEngineerUsernameAndOrderByDeadlineAsc(username, topFive)
+                .stream()
+                .map(workPackageSimplifiedMapper::toDto)
+                .collect(Collectors.toList());
+
+        return workPackagesDto;
+    }
+
 
 }

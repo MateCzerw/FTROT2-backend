@@ -1,5 +1,6 @@
 package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,16 @@ public class TechnicalProjectManagerController {
         UserInfoDto userInfoDto = technicalProjectManagerService.getUserInfoByUsername(principal.getName());
 
         return ResponseEntity.ok().body(userInfoDto);
+    }
+
+    @GetMapping("/board/work-packages")
+    public ResponseEntity<List<WorkPackageSimplifiedDto>> getTopFiveWorkPackagesWithClosestDeadline(Principal principal){
+
+        List<WorkPackageSimplifiedDto> workPackageSimplifiedDtos =
+                technicalProjectManagerService
+                        .getTopFiveWorkPackagesWithClosestDeadline(principal.getName());
+
+        return ResponseEntity.ok().body(workPackageSimplifiedDtos);
     }
 
 

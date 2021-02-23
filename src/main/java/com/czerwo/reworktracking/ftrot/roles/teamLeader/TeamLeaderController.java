@@ -1,11 +1,13 @@
 package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/team-leader")
@@ -24,6 +26,16 @@ public class TeamLeaderController {
         UserInfoDto userInfoDto = teamLeaderService.getUserInfoByUsername(principal.getName());
 
         return ResponseEntity.ok().body(userInfoDto);
+    }
+
+    @GetMapping("/board/work-packages")
+    public ResponseEntity<List<WorkPackageSimplifiedDto>> getTopFiveWorkPackagesWithClosestDeadline(Principal principal){
+
+        List<WorkPackageSimplifiedDto> workPackageSimplifiedDtos =
+                teamLeaderService
+                        .getTopFiveWorkPackagesWithClosestDeadline(principal.getName());
+
+        return ResponseEntity.ok().body(workPackageSimplifiedDtos);
     }
 
 

@@ -3,15 +3,19 @@ package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
+import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.TeamRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WorkPackageRepository;
 import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -28,19 +32,21 @@ public class TechnicalProjectManagerService {
     private final TeamRepository teamRepository;
     private final WorkPackageTasksMapper workPackageTasksMapper;
     private final TaskMapper taskMapper;
+    private WorkPackageSimplifiedMapper workPackageSimplifiedMapper;
 
 
     public TechnicalProjectManagerService(WorkPackageRepository workPackageRepository,
                                           ApplicationUserRepository applicationUserRepository,
                                           TaskRepository taskRepository,
                                           TeamRepository teamRepository, WorkPackageTasksMapper workPackageTasksMapper,
-                                          TaskMapper taskMapper) {
+                                          TaskMapper taskMapper, WorkPackageSimplifiedMapper workPackageSimplifiedMapper) {
         this.workPackageRepository = workPackageRepository;
         this.applicationUserRepository = applicationUserRepository;
         this.taskRepository = taskRepository;
         this.teamRepository = teamRepository;
         this.workPackageTasksMapper = workPackageTasksMapper;
         this.taskMapper = taskMapper;
+        this.workPackageSimplifiedMapper = workPackageSimplifiedMapper;
     }
 
     public UserInfoDto getUserInfoByUsername(String username) {
@@ -153,5 +159,15 @@ public class TechnicalProjectManagerService {
     }
 
 
+    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackagesWithClosestDeadline(String username) {
+        Pageable topFive = PageRequest.of(0, 5);
 
+        List<WorkPackageSimplifiedDto> workPackagesDto = workPackageRepository
+                .findTop5ByAssignedTechnicalProjectManagerUsernameOrderByDeadlineAsc(username, topFive)
+                .stream()
+                .map(workPackageSimplifiedMapper::toDto)
+                .collect(Collectors.toList());
+
+        return workPackagesDto;
+    }
 }
