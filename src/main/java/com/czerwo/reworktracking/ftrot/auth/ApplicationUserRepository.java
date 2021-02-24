@@ -24,5 +24,11 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
     List<ApplicationUser> findEngineersAndLeadEngineersFromTeamByTeamLeaderUsername(String leaderUsername);
 
 
+    @Query("SELECT e FROM ApplicationUser e " +
+            "JOIN FETCH e.userInfo " +
+            "WHERE e.team.id=?1 " +
+            "AND (e.applicationUseRole='ENGINEER' OR e.applicationUseRole='LEAD_ENGINEER')")
+    List<ApplicationUser> findEngineersAndLeadEngineersWithUserInfoByTeamId(Long teamId);
+
 
 }

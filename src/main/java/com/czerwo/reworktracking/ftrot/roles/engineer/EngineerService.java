@@ -6,7 +6,12 @@ import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Day.DayName;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Week;
+import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
+import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
+import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
+import com.czerwo.reworktracking.ftrot.models.mappers.WeekDayMapper;
 import com.czerwo.reworktracking.ftrot.models.repositories.DayRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WeekRepository;
@@ -28,16 +33,23 @@ public class EngineerService {
     private final TaskRepository taskRepository;
     private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
+    private final TaskMapper taskMapper;
+    private final DayTasksMapper dayTasksMapper;
+    private final WeekDayMapper weekDayMapper;
 
 
     public EngineerService(ApplicationUserRepository applicationUserRepository,
                            TaskRepository taskRepository,
                            WeekRepository weekRepository,
-                           DayRepository dayRepository) {
+                           DayRepository dayRepository,
+                           TaskMapper taskMapper, DayTasksMapper dayTasksMapper, WeekDayMapper weekDayMapper) {
         this.applicationUserRepository = applicationUserRepository;
         this.taskRepository = taskRepository;
         this.weekRepository = weekRepository;
         this.dayRepository = dayRepository;
+        this.taskMapper = taskMapper;
+        this.dayTasksMapper = dayTasksMapper;
+        this.weekDayMapper = weekDayMapper;
     }
 
     public UserInfoDto getUserInfoByUsername(String username) {
@@ -106,14 +118,14 @@ public class EngineerService {
         for (Day day: daysByWeekId) {
             List<TaskDto> taskDtos = taskRepository.findAllByDayId(day.getId())
                     .stream()
-                    .map(task -> mapTaskToTaskDto(task))
+                    .map(task -> taskMapper.toDto(task))
                     .collect(Collectors.toList());
 
-            DayDto dayDto = mapDayToDayDto(day, taskDtos);
+            DayDto dayDto = dayTasksMapper.toDto(day, taskDtos);
             dayDtos.add(dayDto);
         }
 
-        return mapWeekToWeekDto(week,dayDtos);
+        return weekDayMapper.toDto(week,dayDtos);
     }
 
 
@@ -153,50 +165,5 @@ public class EngineerService {
         return weekRepository.save(week);
 
     }
-
-
-
-    private WeekDto mapWeekToWeekDto(Week week, List<DayDto> dayDtos){
-        WeekDto weekDto = new WeekDto();
-
-        weekDto.setId(week.getId());
-        weekDto.setWeekNumber(week.getWeekNumber());
-        weekDto.setYearNumber(week.getYearNumber());
-        weekDto.setDays(dayDtos);
-
-        return weekDto;
-    }
-
-    private DayDto mapDayToDayDto(Day day, List<TaskDto> taskDtos) {
-        DayDto dayDto = new DayDto();
-
-        dayDto.setId(day.getId());
-        dayDto.setDate(day.getDate());
-        dayDto.setDayName(day.getDayName().name());
-        dayDto.setTasks(taskDtos);
-
-        return dayDto;
-    }
-
-    private TaskDto mapTaskToTaskDto(Task task) {
-
-        TaskDto taskDto = new TaskDto();
-        taskDto.setId(task.getId());
-        taskDto.setName(task.getName());
-        taskDto.setDuration(task.getDuration());
-        taskDto.setStatus(task.getStatus());
-        taskDto.setDescription(task.getDescription());
-        //todo workpackageName with task from db
-        taskDto.setWorkPackageName(task.getWorkPackage().getName());
-
-        return taskDto;
-
-    }
-
-
-
-
-
-
 
 }

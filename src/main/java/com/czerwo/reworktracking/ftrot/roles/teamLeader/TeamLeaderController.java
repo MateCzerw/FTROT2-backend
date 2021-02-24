@@ -48,6 +48,15 @@ public class TeamLeaderController {
         return ResponseEntity.ok().body(assignedHours);
     }
 
+    @GetMapping("/assign-tasks/data")
+    public ResponseEntity<AssignTasksPanelDto> getDataForAssignTasksPanel(Principal principal){
+
+        AssignTasksPanelDto assignTasksPanelDto =
+                teamLeaderService
+                        .getDataForAssignTasksPanelForCurrentWeek(principal.getName(), 1, 2021);
+
+        return ResponseEntity.ok().body(assignTasksPanelDto);
+    }
 
 
 

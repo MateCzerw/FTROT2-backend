@@ -1,4 +1,4 @@
-package com.czerwo.reworktracking.ftrot.roles.engineer;
+package com.czerwo.reworktracking.ftrot.models.dtos;
 
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 

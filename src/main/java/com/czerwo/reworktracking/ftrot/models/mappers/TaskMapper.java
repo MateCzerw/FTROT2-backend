@@ -16,7 +16,7 @@ public class TaskMapper {
         dto.setStatus(task.getStatus());
         dto.setDuration(task.getDuration());
         dto.setDescription(task.getDescription());
-
+        dto.setWorkPackageName(task.getWorkPackage().getName());
         return  dto;
     }
 

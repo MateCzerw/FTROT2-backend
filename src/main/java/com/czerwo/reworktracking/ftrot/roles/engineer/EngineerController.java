@@ -1,5 +1,6 @@
 package com.czerwo.reworktracking.ftrot.roles.engineer;
 
+import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

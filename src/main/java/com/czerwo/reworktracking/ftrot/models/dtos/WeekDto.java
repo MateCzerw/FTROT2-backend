@@ -1,8 +1,7 @@
-package com.czerwo.reworktracking.ftrot.roles.engineer;
+package com.czerwo.reworktracking.ftrot.models.dtos;
 
-import com.czerwo.reworktracking.ftrot.roles.engineer.DayDto;
+import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class WeekDto {
