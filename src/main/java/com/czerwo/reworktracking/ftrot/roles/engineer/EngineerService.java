@@ -104,8 +104,6 @@ public class EngineerService {
 
         //todo check if week weekNumber and yearNumber can exist
 
-
-
         ApplicationUser userByUsername = applicationUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
         Week week = weekRepository
                 .findByWeekNumberAndYearNumberAndUser(weekNumber, yearNumber, userByUsername)

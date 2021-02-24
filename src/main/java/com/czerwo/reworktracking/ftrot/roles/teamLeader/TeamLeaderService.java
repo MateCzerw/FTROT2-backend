@@ -172,4 +172,27 @@ public class TeamLeaderService {
         return weekDayMapper.toDto(week,dayDtos);
     };
 
+    public WeekDto getWeekWithTasksForEngineerByEngineerId(String username, int weekNumber, int yearNumber, long engineerId) {
+
+        ApplicationUser leaderByUsername = applicationUserRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new RuntimeException());
+
+        ApplicationUser engineer = applicationUserRepository
+                .findById(engineerId)
+                .orElseThrow(() -> new RuntimeException());
+
+        List<ApplicationUser> engineersFromTeamLeaderTeam = applicationUserRepository
+                .findEngineersAndLeadEngineersFromTeamByTeamLeaderUsername(username);
+
+        //todo check if user belongs to team;
+
+
+        Week week = weekRepository
+                .findByWeekNumberAndYearNumberAndUser(weekNumber, yearNumber, engineer)
+                .orElseGet(() -> engineerService.createWeek(engineer, weekNumber, yearNumber));
+
+        return createWeekDtoForEngineer(engineer, week);
+    }
+
 }
