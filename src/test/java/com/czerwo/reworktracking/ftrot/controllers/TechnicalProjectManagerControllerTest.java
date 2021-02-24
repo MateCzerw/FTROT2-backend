@@ -1,7 +1,7 @@
 package com.czerwo.reworktracking.ftrot.controllers;
 
-import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageDto;
-import com.czerwo.reworktracking.ftrot.services.TechnicalProjectManagerService;
+import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.roles.technicalProjectManager.TechnicalProjectManagerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -42,11 +42,11 @@ class TechnicalProjectManagerControllerTest {
     @Test
     void shouldGetAllWorkPackages() throws Exception {
         // given
-        WorkPackageDto workPackageDto = new WorkPackageDto();
-        List<WorkPackageDto> workPackageDtos = Arrays.asList(workPackageDto);
+        WorkPackageTasksDto workPackageTasksDto = new WorkPackageTasksDto();
+        List<WorkPackageTasksDto> workPackageTasksDtos = Arrays.asList(workPackageTasksDto);
 
         // when
-        given(technicalProjectManagerService.findAllWorkPackagesByOwnerUsername(anyString())).willReturn(workPackageDtos);
+        given(technicalProjectManagerService.findAllWorkPackagesByOwnerUsername(anyString())).willReturn(workPackageTasksDtos);
 
         MvcResult mvcResult = mockMvc.perform(get("/api/technical-project-manager/all"))
                 .andDo(MockMvcResultHandlers.print())

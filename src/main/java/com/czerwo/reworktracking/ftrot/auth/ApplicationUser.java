@@ -1,6 +1,7 @@
 package com.czerwo.reworktracking.ftrot.auth;
 
 import com.czerwo.reworktracking.ftrot.models.data.Team;
+import com.czerwo.reworktracking.ftrot.models.data.UserInfo;
 import com.czerwo.reworktracking.ftrot.security.ApplicationUserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,25 +15,24 @@ public class ApplicationUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String username;
     private  String password;
-
+    //private  Set<? extends GrantedAuthority> grantedAuthorities;
     private  boolean isAccountNonExpired;
     private  boolean isAccountNonLocked;
     private  boolean isCredentialsNonExpired;
     private  boolean isEnabled;
 
-    @ManyToOne
-    private Team team;
-
-
-    private UserDetails userDetails;
-
     @Enumerated(EnumType.STRING)
     private ApplicationUserRole applicationUseRole;
 
+    @OneToOne
+    private UserInfo userInfo;
+
+    @ManyToOne
+    private Team team;
 
     public ApplicationUser() {
     }
@@ -60,12 +60,42 @@ public class ApplicationUser implements UserDetails {
         return applicationUseRole.getGrantedAuthorities();
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     public Team getTeam() {
@@ -114,35 +144,5 @@ public class ApplicationUser implements UserDetails {
 
     public void setApplicationUseRole(ApplicationUserRole applicationUseRole) {
         this.applicationUseRole = applicationUseRole;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isEnabled;
     }
 }

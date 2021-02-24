@@ -1,13 +1,11 @@
-package com.czerwo.reworktracking.ftrot.models.dtos;
+package com.czerwo.reworktracking.ftrot.roles.leadEngineer;
 
-public class TaskDto {
+class TaskDto {
 
     private Long id;
     private String name;
     private String description;
     private double duration;
-    private double status;
-    private String workPackageName;
 
     public Long getId() {
         return id;
@@ -39,21 +37,5 @@ public class TaskDto {
 
     public void setDuration(double duration) {
         this.duration = duration;
-    }
-
-    public String getWorkPackageName() {
-        return workPackageName;
-    }
-
-    public void setWorkPackageName(String workPackageName) {
-        this.workPackageName = workPackageName;
-    }
-
-    public void setStatus(double status) {
-        this.status = status;
-    }
-
-    public double getStatus() {
-        return status;
     }
 }

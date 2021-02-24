@@ -1,4 +1,4 @@
-package com.czerwo.reworktracking.ftrot.models.data.Task;
+package com.czerwo.reworktracking.ftrot.models.data;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
@@ -26,13 +26,11 @@ public class Task {
     @ManyToOne
     private Day day;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private double status;
 
     @OneToOne
     private ApplicationUser assignedEngineer;
 
-    private boolean isInBacklog;
 
     public long getId() {
         return id;
@@ -48,14 +46,6 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isInBacklog() {
-        return isInBacklog;
-    }
-
-    public void setInBacklog(boolean inBacklog) {
-        isInBacklog = inBacklog;
     }
 
     public double getDuration() {
@@ -91,11 +81,11 @@ public class Task {
     }
 
 
-    public Status getStatus() {
+    public double getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(double status) {
         this.status = status;
     }
 

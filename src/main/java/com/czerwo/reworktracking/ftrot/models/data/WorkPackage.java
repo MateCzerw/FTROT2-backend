@@ -1,13 +1,11 @@
 package com.czerwo.reworktracking.ftrot.models.data;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
-import com.czerwo.reworktracking.ftrot.models.data.Task.Task;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,11 +21,23 @@ public class WorkPackage {
     @OneToOne
     private ApplicationUser assignedLeadEngineer;
 
+    private String name;
+
+    private String description;
+
+    private LocalDate startDate;
+
+    private LocalDate deadline;
+
     @ManyToOne
     private Team team;
 
-    @OneToMany(mappedBy = "workPackage")
+    @OneToMany(mappedBy = "workPackage", cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
+
+    private boolean isFinished;
+
+    private double status;
 
     public ApplicationUser getAssignedTechnicalProjectManager() {
         return assignedTechnicalProjectManager;
@@ -46,28 +56,27 @@ public class WorkPackage {
     }
 
     public Set<Task> getTasks() {
+        //todo copy of set and tasks -> https://www.udemy.com/course/architektura-java/learn/lecture/21652300#overview
+
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+    public void removeTask(Task task) {
+        tasks.add(task);
     }
 
-    public LocalDateTime getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(LocalDateTime deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
-    private String name;
 
-    private String description;
-
-    private LocalDateTime startDate;
-
-    private LocalDateTime deadline;
 
     public long getId() {
         return id;
@@ -86,7 +95,6 @@ public class WorkPackage {
         this.assignedLeadEngineer = assignedLeadEngineer;
     }
 
-
     public String getName() {
         return name;
     }
@@ -103,15 +111,31 @@ public class WorkPackage {
         this.description = description;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public double getStatus() {
+        return status;
+    }
+
+    public void setStatus(double status) {
+        this.status = status;
+    }
 }
-
-
-
-

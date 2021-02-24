@@ -14,8 +14,8 @@ public enum ApplicationUserRole {
     TECHNICAL_PROJECT_MANAGER(Sets.newHashSet()),
     TEAM_LEADER(Sets.newHashSet()),//COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE)),
     LEAD_ENGINEER(Sets.newHashSet()),//COURSE_READ, STUDENT_READ)),
-    ENGINEER(Sets.newHashSet()),//COURSE_READ, STUDENT_READ)),
-    PRODUCT_GROUP_ENGINEER(Sets.newHashSet());
+    ENGINEER(Sets.newHashSet());//COURSE_READ, STUDENT_READ));
+    //PRODUCT_GROUP_ENGINEER(Sets.newHashSet());
 
 
     private final Set<ApplicationUserPermission> permissions;
