@@ -31,7 +31,6 @@ public class Task {
     @OneToOne
     private ApplicationUser assignedEngineer;
 
-    private boolean isInBacklog;
 
     public long getId() {
         return id;
@@ -47,14 +46,6 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isInBacklog() {
-        return isInBacklog;
-    }
-
-    public void setInBacklog(boolean inBacklog) {
-        isInBacklog = inBacklog;
     }
 
     public double getDuration() {

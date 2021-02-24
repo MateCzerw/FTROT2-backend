@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -174,14 +175,39 @@ public class TechnicalProjectManagerService {
 
     public WorkPackageStatusDto getWorkPackagesStatus(String username) {
 
+        LocalDate currentDate = LocalDate.now();
         WorkPackageStatusDto workPackageStatusDto = new WorkPackageStatusDto();
 
         List<WorkPackage> workPackages = workPackageRepository
                 .findAllByOwnerUsernameWithTasks(username);
-        //Todo
-        workPackageStatusDto.setOnTime(5);
-        workPackageStatusDto.setStopped(5);
-        workPackageStatusDto.setDelayed(5);
+
+        long onTimeWorkPackages = workPackages
+                .stream()
+                .filter(workPackage -> !workPackage.isFinished())
+                .filter(workPackage -> workPackage.getDeadline().isBefore(currentDate))
+                .count();
+
+        long stoppedWorkPackages = workPackages
+                .stream()
+                .filter(workPackage -> workPackage
+                        .getTasks()
+                        .stream()
+                        .filter(task -> task.getDay() == null)
+                        .count() > 0)
+                .count();
+
+        long delayedWorkPackages = workPackages
+                .stream()
+                .filter(workPackage -> !workPackage.isFinished())
+                .filter(workPackage -> workPackage
+                        .getDeadline()
+                        .isAfter(currentDate))
+                .count();
+
+
+        workPackageStatusDto.setOnTime((int)onTimeWorkPackages);
+        workPackageStatusDto.setStopped((int) stoppedWorkPackages);
+        workPackageStatusDto.setDelayed((int) delayedWorkPackages);
 
         return workPackageStatusDto;
     }
