@@ -65,7 +65,7 @@ public class WorkPackage {
         tasks.add(task);
     }
     public void removeTask(Task task) {
-        tasks.add(task);
+        tasks.remove(task);
     }
 
     public LocalDate getDeadline() {

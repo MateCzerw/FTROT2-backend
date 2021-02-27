@@ -42,8 +42,9 @@ public class WorkPackageTasksMapper {
         dto.setStartDate(workPackage.getStartDate());
         dto.setPredictedFinish(LocalDate.now());
         dto.setDeadline(workPackage.getDeadline());
-        dto.setTaskDtos(taskDtos);
-        dto.setTaskFinished(999);
+        dto.setTasks(taskDtos);
+        dto.setTasksQuantity(taskDtos.size());
+        dto.setFinishedTasks(999);
 
         return  dto;
     }

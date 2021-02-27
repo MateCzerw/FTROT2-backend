@@ -3,6 +3,7 @@ package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.roles.engineer.TaskSimplifyDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -85,5 +86,8 @@ public class TechnicalProjectManagerController {
 
         return ResponseEntity.ok().body(updatedWorkPackage);
     }
+
+
+
 
 }

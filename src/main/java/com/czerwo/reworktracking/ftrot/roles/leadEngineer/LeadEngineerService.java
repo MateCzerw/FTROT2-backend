@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,7 @@ public class LeadEngineerService {
 
     }
 
+    @Transactional
     public void deleteTask(String username, Long workPackageId, Long taskId) {
 
         ApplicationUser userByUsername = applicationUserRepository
@@ -67,9 +69,11 @@ public class LeadEngineerService {
         //todo to check if task belongs to workpackage
         boolean isTaskWithinWorkPackage = workPackage.getTasks().stream().anyMatch(task -> task.getId() == taskId);
 
-        if (!isTaskWithinWorkPackage) throw new RuntimeException();
+        Task taskById = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException());
+        workPackage.removeTask(taskById);
 
         taskRepository.deleteById(taskId);
+
     }
 
     public TaskDto createTask(String leadEngineerUsername, TaskDto taskDto, long workPackageId) {

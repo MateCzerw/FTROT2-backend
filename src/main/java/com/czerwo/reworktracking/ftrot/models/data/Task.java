@@ -5,6 +5,7 @@ import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -96,4 +97,6 @@ public class Task {
     public void setAssignedEngineer(ApplicationUser assignedEngineer) {
         this.assignedEngineer = assignedEngineer;
     }
+
+
 }
