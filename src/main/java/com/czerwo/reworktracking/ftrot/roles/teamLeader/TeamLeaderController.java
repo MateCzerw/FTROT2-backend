@@ -3,10 +3,7 @@ package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -68,6 +65,18 @@ public class TeamLeaderController {
                         .getWeekWithTasksForEngineerByEngineerId(principal.getName(), weekNumber, yearNumber, engineerId);
 
         return ResponseEntity.ok().body(weekDto);
+    }
+
+    @PatchMapping("/assign-tasks/tasks/{taskId}")
+    public ResponseEntity<AssignTaskDto> modifyTaskAssignment(Principal principal,
+                                                              @PathVariable long taskId,
+                                                              @RequestBody AssignTaskDto assignTaskDto){
+
+        AssignTaskDto dto =
+                teamLeaderService
+                        .modifyTaskAssignment(principal.getName(), assignTaskDto, taskId);
+
+        return ResponseEntity.ok().body(dto);
     }
 
 

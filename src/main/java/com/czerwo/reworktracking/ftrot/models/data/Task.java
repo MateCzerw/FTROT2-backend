@@ -21,13 +21,17 @@ public class Task {
 
     private String description;
 
+    private double status;
+
+    private long sorting;
+
     @ManyToOne
     private WorkPackage workPackage;
 
     @ManyToOne
     private Day day;
 
-    private double status;
+
 
     @OneToOne
     private ApplicationUser assignedEngineer;
@@ -98,5 +102,11 @@ public class Task {
         this.assignedEngineer = assignedEngineer;
     }
 
+    public long getSorting() {
+        return sorting;
+    }
 
+    public void setSorting(long sorting) {
+        this.sorting = sorting;
+    }
 }
