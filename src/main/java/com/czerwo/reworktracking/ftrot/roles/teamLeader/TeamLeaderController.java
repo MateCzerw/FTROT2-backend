@@ -65,7 +65,7 @@ public class TeamLeaderController {
 
         WeekDto weekDto =
                 teamLeaderService
-                        .getWeekWithTasksForEngineerByEngineerId(principal.getName(), 1, 2021, engineerId);
+                        .getWeekWithTasksForEngineerByEngineerId(principal.getName(), weekNumber, yearNumber, engineerId);
 
         return ResponseEntity.ok().body(weekDto);
     }

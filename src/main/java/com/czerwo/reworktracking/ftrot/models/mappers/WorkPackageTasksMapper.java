@@ -28,7 +28,10 @@ public class WorkPackageTasksMapper {
 
         List<TaskDto> taskDtos = tasks
                 .stream()
-                .map(taskMapper::toDto)
+                .map(task -> {
+                    //todo plannedat and assigned engineer
+                    return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                })
                 .collect(Collectors.toList());
 
 

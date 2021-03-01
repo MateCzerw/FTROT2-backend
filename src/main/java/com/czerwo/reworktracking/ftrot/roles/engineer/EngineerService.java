@@ -116,7 +116,10 @@ public class EngineerService {
         for (Day day: daysByWeekId) {
             List<TaskDto> taskDtos = taskRepository.findAllByDayId(day.getId())
                     .stream()
-                    .map(task -> taskMapper.toDto(task))
+                    .map(task -> {
+                        //todo plannedat and assigned engineer
+                        return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                    })
                     .collect(Collectors.toList());
 
             DayDto dayDto = dayTasksMapper.toDto(day, taskDtos);

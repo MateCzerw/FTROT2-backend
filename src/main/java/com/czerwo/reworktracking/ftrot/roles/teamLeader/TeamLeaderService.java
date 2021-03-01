@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -120,14 +121,17 @@ public class TeamLeaderService {
 
             WeekDto weekDtoForEngineer = createWeekDtoForEngineer(engineer, week);
 
-            engineerDto.setWeekDto(weekDtoForEngineer);
+            engineerDto.setWeek(weekDtoForEngineer);
 
             List<Task> tasksFromBacklogByEngineerId = taskRepository.findTasksFromBacklogByEngineerId(engineer.getId());
 
             engineerDto.setBacklog(
                     tasksFromBacklogByEngineerId
                             .stream()
-                            .map(taskMapper::toDto)
+                            .map(task -> {
+                                //todo plannedat and assigned engineer
+                                return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                            })
                             .collect(Collectors.toList())
             );
 
@@ -138,7 +142,10 @@ public class TeamLeaderService {
                 taskRepository
                         .findUnassignedTasksByTeamId(teamByByLeaderUsername.getId())
                         .stream()
-                        .map(taskMapper::toDto)
+                        .map(task -> {
+                            //todo plannedat and assigned engineer
+                            return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                        })
                         .collect(Collectors.toList())
         );
 
@@ -162,7 +169,10 @@ public class TeamLeaderService {
         for (Day day: daysByWeekId) {
             List<TaskDto> taskDtos = taskRepository.findAllByDayId(day.getId())
                     .stream()
-                    .map(task -> taskMapper.toDto(task))
+                    .map(task -> {
+                        //todo plannedat and assigned engineer
+                        return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                    })
                     .collect(Collectors.toList());
 
             DayDto dayDto = dayTasksMapper.toDto(day, taskDtos);

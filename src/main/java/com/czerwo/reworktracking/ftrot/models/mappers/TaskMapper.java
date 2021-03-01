@@ -4,10 +4,12 @@ import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class TaskMapper {
 
-    public TaskDto toDto(Task task){
+    public TaskDto toDto(Task task, LocalDate plannedAt, String assignedEngineerName){
 
         TaskDto dto = new TaskDto();
 
@@ -17,7 +19,9 @@ public class TaskMapper {
         dto.setDuration(task.getDuration());
         dto.setDescription(task.getDescription());
         dto.setWorkPackageName(task.getWorkPackage().getName());
-        return  dto;
+        dto.setAssignedEngineerName(assignedEngineerName);
+        dto.setPlannedAt(plannedAt);
+        return dto;
     }
 
 //    public Task toEntity(TaskDto task){
