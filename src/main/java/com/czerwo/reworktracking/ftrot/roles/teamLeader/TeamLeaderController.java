@@ -68,15 +68,14 @@ public class TeamLeaderController {
     }
 
     @PatchMapping("/assign-tasks/tasks/{taskId}")
-    public ResponseEntity<AssignTaskDto> modifyTaskAssignment(Principal principal,
+    public ResponseEntity<Void> modifyTaskAssignment(Principal principal,
                                                               @PathVariable long taskId,
                                                               @RequestBody AssignTaskDto assignTaskDto){
 
-        AssignTaskDto dto =
                 teamLeaderService
                         .modifyTaskAssignment(principal.getName(), assignTaskDto, taskId);
 
-        return ResponseEntity.ok().body(dto);
+        return ResponseEntity.noContent().build();
     }
 
 

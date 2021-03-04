@@ -205,44 +205,67 @@ public class TeamLeaderService {
         return createWeekDtoForEngineer(engineer, week);
     }
 
-    public AssignTaskDto modifyTaskAssignment(String teamLeaderName, AssignTaskDto assignTaskDto, long taskId) {
+    public void modifyTaskAssignment(String teamLeaderName, AssignTaskDto assignTaskDto, long taskId) {
 
-        ApplicationUser teamLeader = applicationUserRepository.findByUsername(teamLeaderName).orElseThrow(() -> new RuntimeException());
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException());
-        if(assignTaskDto.isInBacklog){
+        ApplicationUser teamLeader = applicationUserRepository
+                .findByUsername(teamLeaderName)
+                .orElseThrow(() -> new RuntimeException());
+
+        Task task = taskRepository
+                .findById(taskId)
+                .orElseThrow(() -> new RuntimeException());
+
+        if(assignTaskDto.isInBacklog() && assignTaskDto.isInUnfinishedTasks()) throw new RuntimeException();
+
+
+            if(assignTaskDto.isInBacklog()){
+
             //todo check if assignedEngineer belongs to TeamLeaderTeam
             ApplicationUser assignedEngineer = applicationUserRepository
-                    .findById(assignTaskDto.getDayId())
+                    .findById(assignTaskDto.getEngineerId())
                     .orElseThrow(() -> new RuntimeException());
 
             task.setDay(null);
             task.setAssignedEngineer(assignedEngineer);
             task.setSorting(assignTaskDto.getSorting());
-            //todo replaceSorting
-            //todo return DTO
+            taskRepository.save(task);
+            return;
+
         }
 
-        if(assignTaskDto.getDayId() == 0){
+        if(assignTaskDto.isInUnfinishedTasks()){
             task.setDay(null);
             task.setAssignedEngineer(null);
             task.setSorting(assignTaskDto.getSorting());
             //todo replaceSorting
-            //todo return DTO
+            taskRepository.save(task);
+            return;
         }
 
 
 
         //todo check if there is day in assignTaskDto
-        Day day = dayRepository.findById(assignTaskDto.getDayId()).orElseThrow(() -> new RuntimeException());
-        ApplicationUser assignedEngineer = applicationUserRepository
+        Day day = dayRepository
                 .findById(assignTaskDto.getDayId())
                 .orElseThrow(() -> new RuntimeException());
+        //todo check if day belongs to teamleader team user
+
+        Week week = weekRepository
+                .findWeekByDayId(day.getId())
+                .orElseThrow(() -> new RuntimeException());
+
+        ApplicationUser assignedEngineer = applicationUserRepository
+                .findById(assignTaskDto.getEngineerId())
+                .orElseThrow(() -> new RuntimeException());
+
+        if(!week.getUser().equals(assignedEngineer)) throw new RuntimeException();
+
         task.setAssignedEngineer(assignedEngineer);
         task.setDay(day);
         task.setSorting(assignTaskDto.getSorting());
+        taskRepository.save(task);
         //todo replaceSorting
-        //todo return DTO
 
-        return null;
     }
+
 }
