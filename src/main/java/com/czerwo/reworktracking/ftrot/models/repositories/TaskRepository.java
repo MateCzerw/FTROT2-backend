@@ -1,10 +1,13 @@
 package com.czerwo.reworktracking.ftrot.models.repositories;
 
+import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -31,8 +34,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "AND e.workPackage.team.id =?1")
     List<Task> findUnassignedTasksByTeamId(Long teamId);
 
-    List<Task> findAllByAssignedEngineerId(Long id);
+    @Query("SELECT e FROM Task e " +
+            "WHERE e.assignedEngineer.id=?1 " +
+            "AND e.workPackage.team.id =?1")
+    List<Task> findAllByAssignedEngineerIdAndDate(Long id, LocalDate date);
 
 
     List<Task> findAllByDayId(Long dayId);
+
+    @Query("SELECT e FROM Task e " +
+            "WHERE e.assignedEngineer.id=?1 " +
+            "AND e.day =?2")
+    List<Task> findAllByAssignedEngineerIdAndDay(long assignedEngineerId, Day dayByDate);
 }

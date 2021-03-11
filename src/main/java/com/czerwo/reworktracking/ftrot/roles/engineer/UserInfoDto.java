@@ -14,9 +14,6 @@ class UserInfoDto {
     private LocalDate joinedAt;
 
 
-    public UserInfoDto() {
-    }
-
     public String getName() {
         return name;
     }

@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/engineer")
 public class EngineerController {
 
-    EngineerService engineerService;
+    private final EngineerService engineerService;
 
     public EngineerController(EngineerService engineerService) {
         this.engineerService = engineerService;
@@ -24,7 +24,6 @@ public class EngineerController {
 
     @GetMapping("/board/user-info")
     public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
-
 
         UserInfoDto userInfoDto = engineerService.getUserInfoByUsername(principal.getName());
 
@@ -59,13 +58,6 @@ public class EngineerController {
 
         return ResponseEntity.ok().body(userWeekWithTasks);
     }
-
-
-    // LIST OF TASKS TO DO
-
-    // TO SET THAT TASK IS DONE
-
-    // TO SET THAT TASK IS NOT DONE
 
 
 

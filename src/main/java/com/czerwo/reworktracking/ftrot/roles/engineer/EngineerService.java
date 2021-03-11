@@ -9,6 +9,10 @@ import com.czerwo.reworktracking.ftrot.models.data.Week;
 import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Day.DayNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Team.TeamNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.TeamLeaderNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WeekDayMapper;
@@ -54,28 +58,41 @@ public class EngineerService {
 
     public UserInfoDto getUserInfoByUsername(String username) {
 
-        Optional<ApplicationUser> userByUsername = applicationUserRepository.findByUsernameWithTeamAndUserInfo(username);
+        Optional<ApplicationUser> userWithTeamAndUserInfoByUsername = applicationUserRepository
+                .findByUsernameWithTeamAndUserInfo(username);
+
+        Optional<ApplicationUser> teamLeader = applicationUserRepository
+                .findTeamLeaderWithUserInfoByTeam(
+                        userWithTeamAndUserInfoByUsername
+                        .map(ApplicationUser::getTeam)
+                        .orElseThrow(() -> new TeamLeaderNotFoundException()));
 
         int unFinishedTasks = taskRepository
                 .countTaskByAssignedEngineerIdAndStatusIsNotStatusFinished(
-                        userByUsername.map(ApplicationUser::getId)
+                        userWithTeamAndUserInfoByUsername.map(ApplicationUser::getId)
                                 .orElseGet(() -> 0L));
 
 
 
-        return UserInfoMapper.toDto(userByUsername, 0.15, unFinishedTasks);
+        return UserInfoMapper.toDto(userWithTeamAndUserInfoByUsername, teamLeader, 0, unFinishedTasks);
 
     }
 
     public List<TaskSimplifyDto> getTasksForDay(String username) {
 
-        Optional<ApplicationUser> userByUsername = applicationUserRepository
-                .findByUsername(username);
+        LocalDate date = LocalDate.now();
+
+
+        ApplicationUser userByUsername = applicationUserRepository
+                .findByUsername(username)
+                .orElseThrow(()-> new UserNotFoundException(username));
+
+        Day dayByDate = dayRepository.findByDateAndUser(userByUsername, date).orElseThrow( () -> new DayNotFoundException());
 
         List<Task> AssignedTasksForDay = taskRepository
-                .findAllByAssignedEngineerId(userByUsername
-                .map(ApplicationUser::getId)
-                .orElseThrow(() -> new RuntimeException()));
+                .findAllByAssignedEngineerIdAndDay(
+                        userByUsername.getId(),dayByDate);
+
 
         return AssignedTasksForDay
                 .stream()
