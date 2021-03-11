@@ -80,7 +80,7 @@ public class EngineerService {
 
     public List<TaskSimplifyDto> getTasksForDay(String username) {
 
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.parse("2020-11-01");
 
 
         ApplicationUser userByUsername = applicationUserRepository

@@ -45,15 +45,15 @@ VALUES (1, 1, 2021),
 
 INSERT INTO DAY(DATE, DAY_NAME, WEEK_ID)
 VALUES ('2020-11-01', 'MONDAY', 1),
-       ('2020-11-01', 'TUESDAY', 1),
-       ('2020-11-01', 'WEDNESDAY', 1),
-       ('2020-11-01', 'THURSDAY', 1),
-       ('2020-11-01', 'FRIDAY', 1),
+       ('2020-12-01', 'TUESDAY', 1),
+       ('2020-13-01', 'WEDNESDAY', 1),
+       ('2020-14-01', 'THURSDAY', 1),
+       ('2020-15-01', 'FRIDAY', 1),
        ('2020-11-01', 'MONDAY', 2),
-       ('2020-11-01', 'TUESDAY', 2),
-       ('2020-11-01', 'WEDNESDAY', 2),
-       ('2020-11-01', 'THURSDAY', 2),
-       ('2020-11-01', 'FRIDAY', 2);
+       ('2020-12-01', 'TUESDAY', 2),
+       ('2020-13-01', 'WEDNESDAY', 2),
+       ('2020-14-01', 'THURSDAY', 2),
+       ('2020-15-01', 'FRIDAY', 2);
 
 INSERT INTO TASK(DESCRIPTION, DURATION, NAME, WORK_PACKAGE_ID, STATUS, ASSIGNED_ENGINEER_ID, DAY_ID, SORTING)
 VALUES ('LOREM IPSUM', 1, 'CAD', 1, 1, 1, 1,1),
