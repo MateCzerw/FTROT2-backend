@@ -27,7 +27,7 @@ class UserInfoMapper {
                         .substring(5))
                 .orElseGet(() -> "Not assigned"));
         dto.setSupervisor(teamLeader.map(ApplicationUser::getUserInfo)
-                .map((info) -> info.getName().join(" ", info.getSurname()))
+                .map((info) -> String.join(" " ,info.getName(), info.getSurname()))
                 .orElseThrow(() -> new TeamLeaderNotFoundException()));
         dto.setReworkRatio(reworkRatio);
         dto.setJoinedAt(user

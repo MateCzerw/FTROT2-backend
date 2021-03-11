@@ -87,7 +87,8 @@ public class EngineerService {
                 .findByUsername(username)
                 .orElseThrow(()-> new UserNotFoundException(username));
 
-        Day dayByDate = dayRepository.findByDateAndUser(userByUsername, date).orElseThrow( () -> new DayNotFoundException());
+        Day dayByDate = dayRepository.findByEngineerAndDate(userByUsername, date)
+                .orElseThrow( () -> new DayNotFoundException());
 
         List<Task> AssignedTasksForDay = taskRepository
                 .findAllByAssignedEngineerIdAndDay(

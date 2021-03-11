@@ -16,6 +16,7 @@ public interface DayRepository extends JpaRepository<Day, Long> {
 
     @Query("SELECT e FROM Day e " +
             "WHERE e.week.user=?1 " +
-            "AND e.date=?2")
-    Optional<Day> findByDateAndUser(ApplicationUser userByUsername, LocalDate date);
+             "AND e.date=?2"
+            )
+    Optional<Day> findByEngineerAndDate(ApplicationUser userByUsername, LocalDate date);
 }
