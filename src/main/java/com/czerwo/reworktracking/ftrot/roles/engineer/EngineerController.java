@@ -1,5 +1,6 @@
 package com.czerwo.reworktracking.ftrot.roles.engineer;
 
+import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,8 +18,10 @@ public class EngineerController {
 
     private final EngineerService engineerService;
 
-    public EngineerController(EngineerService engineerService) {
+
+    public EngineerController(EngineerService engineerService, DataService dataService) {
         this.engineerService = engineerService;
+
     }
 
 
@@ -32,6 +36,8 @@ public class EngineerController {
 
     @GetMapping("/board/tasks")
     public ResponseEntity<List<TaskSimplifyDto>> getTasksForDay(Principal principal){
+
+
 
         List<TaskSimplifyDto> tasksForDay = engineerService.getTasksForDay(principal.getName());
 

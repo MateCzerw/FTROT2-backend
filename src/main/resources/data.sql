@@ -44,16 +44,16 @@ VALUES (1, 1, 2021),
        (2, 1, 2021);
 
 INSERT INTO DAY(DATE, DAY_NAME, WEEK_ID)
-VALUES ('2020-11-01', 'MONDAY', 1),
-       ('2020-11-02', 'TUESDAY', 1),
-       ('2020-11-03', 'WEDNESDAY', 1),
-       ('2020-11-04', 'THURSDAY', 1),
-       ('2020-11-05', 'FRIDAY', 1),
-       ('2020-11-01', 'MONDAY', 2),
-       ('2020-11-02', 'TUESDAY', 2),
-       ('2020-11-03', 'WEDNESDAY', 2),
-       ('2020-11-04', 'THURSDAY', 2),
-       ('2020-11-05', 'FRIDAY', 2);
+VALUES ('2021-03-08', 'MONDAY', 1),
+       ('2021-03-09', 'TUESDAY', 1),
+       ('2021-03-10', 'WEDNESDAY', 1),
+       ('2021-03-11', 'THURSDAY', 1),
+       ('2021-03-12', 'FRIDAY', 1),
+       ('2021-03-08', 'MONDAY', 2),
+       ('2021-03-09', 'TUESDAY', 2),
+       ('2021-03-10', 'WEDNESDAY', 2),
+       ('2021-03-11', 'THURSDAY', 2),
+       ('2021-03-12', 'FRIDAY', 2);
 
 INSERT INTO TASK(DESCRIPTION, DURATION, NAME, WORK_PACKAGE_ID, STATUS, ASSIGNED_ENGINEER_ID, DAY_ID, SORTING)
 VALUES ('LOREM IPSUM', 1, 'CAD', 1, 1, 1, 1,1),
@@ -70,7 +70,7 @@ VALUES ('LOREM IPSUM', 1, 'CAD', 1, 1, 1, 1,1),
        ('LOREM IPSUM', 1, 'FEM', 2, 0.6, 1, 2,7),
        ('LOREM IPSUM', 1, 'DRAWING', 2, 0.2, 1, 3,8),
        ('LOREM IPSUM', 1, 'ASSEMBLY', 2, 0.5, 1, 4,9),
-       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 2, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
        ('LOREM IPSUM', 1, 'CAD', 3, 0.5, 2, 6,11),
        ('LOREM IPSUM', 1, 'FEM', 3, 0.5, NULL , 6,12),
        ('LOREM IPSUM', 1, 'DRAWING', 3, 0.5, 2, 7,13),

@@ -2,6 +2,7 @@ package com.czerwo.reworktracking.ftrot.roles.engineer;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
+import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Day.DayName;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
@@ -10,7 +11,6 @@ import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import com.czerwo.reworktracking.ftrot.models.exceptions.Day.DayNotFoundException;
-import com.czerwo.reworktracking.ftrot.models.exceptions.Team.TeamNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.TeamLeaderNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class EngineerService {
 
+    private final DataService dataService;
     private final ApplicationUserRepository applicationUserRepository;
     private final TaskRepository taskRepository;
     private final WeekRepository weekRepository;
@@ -42,11 +43,12 @@ public class EngineerService {
     private final WeekDayMapper weekDayMapper;
 
 
-    public EngineerService(ApplicationUserRepository applicationUserRepository,
+    public EngineerService(DataService dataService, ApplicationUserRepository applicationUserRepository,
                            TaskRepository taskRepository,
                            WeekRepository weekRepository,
                            DayRepository dayRepository,
                            TaskMapper taskMapper, DayTasksMapper dayTasksMapper, WeekDayMapper weekDayMapper) {
+        this.dataService = dataService;
         this.applicationUserRepository = applicationUserRepository;
         this.taskRepository = taskRepository;
         this.weekRepository = weekRepository;
@@ -80,8 +82,7 @@ public class EngineerService {
 
     public List<TaskSimplifyDto> getTasksForDay(String username) {
 
-        LocalDate date = LocalDate.parse("2020-11-01");
-
+        LocalDate date = dataService.getClosestWorkingDay();
 
         ApplicationUser userByUsername = applicationUserRepository
                 .findByUsername(username)
