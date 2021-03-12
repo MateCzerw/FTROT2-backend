@@ -33,31 +33,37 @@ public class DataService {
     }
 
 
-    public int getNextWeekNumber(int week, int year){
+    public int getNextWeekNumber(int currentWeek, int currentYear){
 
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, currentYear);
 
-        int lastWeekInTheYear;
-
-        if(week + 1 > lastWeekInTheYear) return 1;
-
-        else return week+1;
-
+        if(currentWeek + 1 > cal.getWeeksInWeekYear()) return 1;
+        else return currentWeek+1;
     }
 
-    public int getNextWeekYear(int week, int year){
+    public int getNextWeekYear(int currentWeek, int currentYear){
 
-        return 1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, currentYear);
+
+        if(currentWeek + 1 > cal.getWeeksInWeekYear()) return currentYear + 1;
+        else return currentYear;
     }
 
-    public int getPreviousWeekNumber(int week, int year){
+    public int getPreviousWeekNumber(int currentWeek, int currentYear){
 
-        return 1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, currentYear-1);
+
+        if(currentWeek - 1 < 1) return cal.getWeeksInWeekYear();
+        return currentWeek - 1;
     }
 
-    public int
-    getPreviousWeekYear(int week, int year){
+    public int getPreviousWeekYear(int currentWeek, int currentYear){
 
-        return 1;
+        if(currentWeek - 1 < 1) return currentYear - 1;
+        return currentYear;
     }
 
 
