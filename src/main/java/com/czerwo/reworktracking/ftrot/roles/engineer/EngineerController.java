@@ -43,13 +43,12 @@ public class EngineerController {
     }
 
     @GetMapping("/board/graph-details")
-    public ResponseEntity<Integer> getTotalDurationOfAssignedTasksInCurrentWeek(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+    public ResponseEntity<Integer> getTotalDurationOfAssignedTasksInCurrentWeek(Principal principal){
 
         Integer assignedTasksDuration = engineerService
                 .getTotalDurationOfAssignedTasksInCurrentWeek(
-                        principal.getName(),
-                        weekNumber,
-                        yearNumber);
+                        principal.getName()
+                        );
 
         return ResponseEntity.ok().body(assignedTasksDuration);
     }

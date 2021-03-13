@@ -16,6 +16,7 @@ import com.czerwo.reworktracking.ftrot.models.exceptions.Task.TaskNotFoundExcept
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.TeamLeaderNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotTaskOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Week.DuplicateWeekExceptionException;
 import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WeekDayMapper;
@@ -107,7 +108,10 @@ public class EngineerService {
     }
 
 
-    public int getTotalDurationOfAssignedTasksInCurrentWeek(String username, int weekNumber, int yearNumber){
+    public int getTotalDurationOfAssignedTasksInCurrentWeek(String username){
+
+        int weekNumber = dataService.getCurrentWeekNumber();
+        int yearNumber = dataService.getCurrentYearNumber();
 
        ApplicationUser userByUsername = applicationUserRepository
                 .findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
@@ -170,7 +174,7 @@ public class EngineerService {
         weekRepository
                 .findByWeekNumberAndYearNumberAndUser(weekNumber,yearNumber,user)
                 .ifPresent(item ->{
-                    throw new RuntimeException();
+                    throw new DuplicateWeekExceptionException();
                 });
 
 
@@ -185,6 +189,7 @@ public class EngineerService {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, yearNumber);
             cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
             cal.set(Calendar.DAY_OF_WEEK, DayName.getCalendarDay(dayName));
             day.setDate(LocalDate.parse(sdf.format(cal.getTime())));
