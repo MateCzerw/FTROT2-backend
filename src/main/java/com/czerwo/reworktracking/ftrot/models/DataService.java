@@ -11,11 +11,20 @@ import java.util.Date;
 @Service
 public class DataService {
 
+
+
+
     public LocalDate getClosestWorkingDay(){
         LocalDate date = LocalDate.now();
         if(date.getDayOfWeek().name().equals(DayOfWeek.SUNDAY.name())) return date.minusDays(2);
         if(date.getDayOfWeek().name().equals(DayOfWeek.SATURDAY.name())) return date.minusDays(1);
         return date;
+    }
+
+    public int getWeeksInWeekYear(int yearNumber) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, yearNumber);
+        return cal.getWeeksInWeekYear();
     }
 
     public int getCurrentWeekNumber(){
@@ -35,28 +44,24 @@ public class DataService {
 
     public int getNextWeekNumber(int currentWeek, int currentYear){
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, currentYear);
-
-        if(currentWeek + 1 > cal.getWeeksInWeekYear()) return 1;
+        if(currentWeek + 1 > getWeeksInWeekYear(currentYear)) return 1;
         else return currentWeek+1;
     }
+
+
 
     public int getNextWeekYear(int currentWeek, int currentYear){
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, currentYear);
 
-        if(currentWeek + 1 > cal.getWeeksInWeekYear()) return currentYear + 1;
+        if(currentWeek + 1 > getWeeksInWeekYear(currentYear)) return currentYear + 1;
         else return currentYear;
     }
 
     public int getPreviousWeekNumber(int currentWeek, int currentYear){
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, currentYear-1);
-
-        if(currentWeek - 1 < 1) return cal.getWeeksInWeekYear();
+        if(currentWeek - 1 < 1) return getWeeksInWeekYear(currentYear-1);
         return currentWeek - 1;
     }
 
@@ -65,6 +70,8 @@ public class DataService {
         if(currentWeek - 1 < 1) return currentYear - 1;
         return currentYear;
     }
+
+
 
 
 }

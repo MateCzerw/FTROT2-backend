@@ -3,10 +3,7 @@ package com.czerwo.reworktracking.ftrot.roles.engineer;
 import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -58,13 +55,38 @@ public class EngineerController {
     }
 
     @GetMapping("/tasks")
-    public ResponseEntity<WeekDto> getUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+    public ResponseEntity<WeekDto> getCurrentUserWeekWithTasks(Principal principal){
 
-        WeekDto userWeekWithTasks = engineerService.getUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+        WeekDto userWeekWithTasks = engineerService.getCurrentUserWeekWithTasks(principal.getName());
 
         return ResponseEntity.ok().body(userWeekWithTasks);
     }
 
+    @PatchMapping("/tasks/{taskId}")
+    public ResponseEntity<Void> changeTaskStatus(Principal principal, @PathVariable long taskId, @RequestParam double status){
+
+        engineerService.editTaskStatus(principal.getName(), status, taskId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/tasks/next-week")
+    public ResponseEntity<WeekDto> getNextUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+
+        WeekDto nextUserWeekWithTasks = engineerService.getNextUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+
+        return ResponseEntity.ok().body(nextUserWeekWithTasks);
+    }
+
+    @GetMapping("/tasks/previous-week")
+    public ResponseEntity<WeekDto> getPreviousUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+
+        WeekDto previousUserWeekWithTasks = engineerService.getPreviousUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+
+        return ResponseEntity.ok().body(previousUserWeekWithTasks);
+
+    }
 
 
 }

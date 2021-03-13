@@ -6,7 +6,7 @@ import com.czerwo.reworktracking.ftrot.models.data.Team;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
-import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotOwnerException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotWorkPackageOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
@@ -110,7 +110,7 @@ public class TechnicalProjectManagerService {
                 .findById(workPackageId)
                 .orElseThrow(() -> new WorkPackageNotFoundException(workPackageId));
 
-        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotWorkPackageOwnerException();
 
         workPackageRepository.deleteById(workPackageId);
     }
@@ -125,7 +125,7 @@ public class TechnicalProjectManagerService {
                 .findById(workPackageDto.getId())
                 .orElseThrow(() -> new WorkPackageNotFoundException(workPackageDto.getId()));
 
-        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotOwnerException();
+        if (!workPackageById.getAssignedTechnicalProjectManager().getUsername().equals(owner)) throw new UserIsNotWorkPackageOwnerException();
 
         WorkPackage updatedWorkPackage = updateWorkPackage(workPackageById, workPackageDto);
 

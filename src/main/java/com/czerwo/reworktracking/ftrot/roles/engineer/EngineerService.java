@@ -10,8 +10,11 @@ import com.czerwo.reworktracking.ftrot.models.data.Week;
 import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Date.WrongDateException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.Day.DayNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Task.TaskNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.TeamLeaderNotFoundException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotTaskOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
@@ -107,7 +110,7 @@ public class EngineerService {
     public int getTotalDurationOfAssignedTasksInCurrentWeek(String username, int weekNumber, int yearNumber){
 
        ApplicationUser userByUsername = applicationUserRepository
-                .findByUsername(username).orElseThrow(() -> new RuntimeException());
+                .findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
 
         weekRepository
                 .findByWeekNumberAndYearNumberAndUser(weekNumber, yearNumber, userByUsername)
@@ -118,12 +121,21 @@ public class EngineerService {
 
 
 
+    public WeekDto getCurrentUserWeekWithTasks(String username){
+
+        int weekNumber = dataService.getCurrentWeekNumber();
+        int yearNumber = dataService.getCurrentYearNumber();
+
+        return getUserWeekWithTasks(username, weekNumber, yearNumber);
+
+    }
+
 
     public WeekDto getUserWeekWithTasks(String username, int weekNumber, int yearNumber){
 
-        //todo check if week weekNumber and yearNumber can exist
-
-        ApplicationUser userByUsername = applicationUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
+        ApplicationUser userByUsername = applicationUserRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
         Week week = weekRepository
                 .findByWeekNumberAndYearNumberAndUser(weekNumber, yearNumber, userByUsername)
                 .orElseGet(() -> createWeek(userByUsername, weekNumber, yearNumber));
@@ -137,7 +149,7 @@ public class EngineerService {
                     .stream()
                     .map(task -> {
                         //todo plannedat and assigned engineer
-                        return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                        return taskMapper.toDto(task, null, null);
                     })
                     .collect(Collectors.toList());
 
@@ -152,6 +164,7 @@ public class EngineerService {
     @Transactional
     public Week createWeek(ApplicationUser user, int weekNumber, int yearNumber) {
 
+    //todo check if week exists and days exists
 
 
         weekRepository
@@ -186,4 +199,39 @@ public class EngineerService {
 
     }
 
+    public WeekDto getNextUserWeekWithTasks(String username, int initialWeekNumber, int initialYearNumber) {
+
+        if(dataService.getWeeksInWeekYear(initialYearNumber) < initialWeekNumber) throw new WrongDateException();
+
+        int nextWeekNumber = dataService.getNextWeekNumber(initialWeekNumber, initialYearNumber);
+        int nextWeekYear = dataService.getNextWeekYear(initialWeekNumber, initialYearNumber);
+
+        return getUserWeekWithTasks(username, nextWeekNumber, nextWeekYear);
+
+    }
+
+    public WeekDto getPreviousUserWeekWithTasks(String username, int initialWeekNumber, int initialYearNumber) {
+
+        if(initialWeekNumber < 1) throw new WrongDateException();
+
+        int previousWeekNumber = dataService.getPreviousWeekNumber(initialWeekNumber, initialYearNumber);
+        int previousWeekYear = dataService.getPreviousWeekYear(initialWeekNumber, initialYearNumber);
+
+        return getUserWeekWithTasks(username, previousWeekNumber, previousWeekYear);
+
+    }
+
+    public void editTaskStatus(String username, double status, long taskId) {
+        ApplicationUser userByUsername = applicationUserRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
+
+        if(!task.getAssignedEngineer().equals(userByUsername)) throw new UserIsNotTaskOwnerException();
+
+        task.setStatus(status);
+
+        taskRepository.save(task);
+    }
 }
