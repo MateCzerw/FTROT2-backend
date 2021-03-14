@@ -2,6 +2,7 @@ package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
+import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
@@ -38,12 +39,13 @@ public class TeamLeaderService {
     private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
     private final EngineerService engineerService;
+    private final DataService dataService;
     private final DayTasksMapper dayTasksMapper;
     private final TaskMapper taskMapper;
     private final WeekDayMapper weekDayMapper;
 
 
-    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository, TaskRepository taskRepository, WeekRepository weekRepository, DayRepository dayRepository, EngineerService engineerService, DayTasksMapper dayTasksMapper, TaskMapper taskMapper, WeekDayMapper weekDayMapper) {
+    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository, TaskRepository taskRepository, WeekRepository weekRepository, DayRepository dayRepository, EngineerService engineerService, DataService dataService, DayTasksMapper dayTasksMapper, TaskMapper taskMapper, WeekDayMapper weekDayMapper) {
         this.applicationUserRepository = applicationUserRepository;
         this.workPackageRepository = workPackageRepository;
         this.workPackageSimplifiedMapper = workPackageSimplifiedMapper;
@@ -52,6 +54,7 @@ public class TeamLeaderService {
         this.weekRepository = weekRepository;
         this.dayRepository = dayRepository;
         this.engineerService = engineerService;
+        this.dataService = dataService;
         this.dayTasksMapper = dayTasksMapper;
         this.taskMapper = taskMapper;
         this.weekDayMapper = weekDayMapper;
@@ -82,14 +85,17 @@ public class TeamLeaderService {
         return workPackagesDto;
     }
 
-    public int getAssignedHoursForCurrentWeek(String username, int week, int year) {
+    public int getAssignedHoursForCurrentWeek(String username) {
+
+        int currentWeek = dataService.getCurrentWeekNumber();
+        int currentYearNumber = dataService.getCurrentYearNumber();
 
         List<ApplicationUser> engineers = applicationUserRepository
                 .findEngineersAndLeadEngineersFromTeamByTeamLeaderUsername(username);
 
         int assignedHours = engineers
                 .stream()
-                .map(e -> taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(e.getId(), week, year))
+                .map(e -> taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(e.getId(), currentWeek, currentYearNumber))
                 .collect(Collectors.summingInt(Integer::intValue));
 
 

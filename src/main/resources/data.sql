@@ -1,9 +1,10 @@
 INSERT INTO USER_INFO(NAME, SURNAME, EMAIL, JOINED_AT, PICTURE_URL)
-VALUES ('AGNIESZKA', 'LESZCZUK', 'TEST1@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('MAREK', 'REPELA', 'TEST2@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('MACIEJ', 'PSZCZOLA', 'TEST3@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('MATEUSZ', 'CZERWIŃSKI', 'TEST4@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('WOJCIECH', 'ZABIEGŁO', 'TEST5@GMAIL.COM', '2020-11-01', 'www.test.com');
+VALUES ('Agnieszka', 'Leszczuk', 'TEST1@GMAIL.COM', '2020-11-01', 'www.test.com'),
+       ('Marek', 'Repeła', 'TEST2@GMAIL.COM', '2020-11-01', 'www.test.com'),
+       ('Maciej', 'Pszczoła', 'TEST3@GMAIL.COM', '2020-11-01', 'www.test.com'),
+       ('Mateusz', 'Czerwiński', 'TEST4@GMAIL.COM', '2020-11-01', 'www.test.com'),
+       ('Wojciech', 'Zabiegło', 'TEST5@GMAIL.COM', '2020-11-01', 'www.test.com'),
+        ('Bartosz', 'Kozłowski', 'TEST6@GMAIL.COM', '2020-11-01', 'www.test.com');
 
 
 INSERT INTO TEAM(NAME)
@@ -21,6 +22,8 @@ VALUES ('ENGINEER', true, true, true, true, '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIH
         '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIHXacdbNH6TM7Ga28CF7W5MD7RC', 'tpjm', 3, 1),
        ('LEAD_ENGINEER', true, true, true, true, '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIHXacdbNH6TM7Ga28CF7W5MD7RC',
         'user3', 4, 1),
+       ('LEAD_ENGINEER', true, true, true, true, '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIHXacdbNH6TM7Ga28CF7W5MD7RC',
+        'user4', 6, 1),
        ('TEAM_LEADER', true, true, true, true, '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIHXacdbNH6TM7Ga28CF7W5MD7RC',
         'teamleader', 5, 1);
 
@@ -70,6 +73,12 @@ VALUES ('LOREM IPSUM', 1, 'CAD', 1, 1, 1, 1,1),
        ('LOREM IPSUM', 1, 'FEM', 2, 0.6, 1, 2,7),
        ('LOREM IPSUM', 1, 'DRAWING', 2, 0.2, 1, 3,8),
        ('LOREM IPSUM', 1, 'ASSEMBLY', 2, 0.5, 1, 4,9),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
+       ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
        ('LOREM IPSUM', 1, 'DFMEA', 2, 0.5, 1, 5,10),
        ('LOREM IPSUM', 1, 'CAD', 3, 0.5, 2, 6,11),
        ('LOREM IPSUM', 1, 'FEM', 3, 0.5, NULL , 6,12),

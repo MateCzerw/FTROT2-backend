@@ -42,7 +42,7 @@ public class TeamLeaderController {
 
         int assignedHours =
                 teamLeaderService
-                        .getAssignedHoursForCurrentWeek(principal.getName(), 1, 2021);
+                        .getAssignedHoursForCurrentWeek(principal.getName());
 
         return ResponseEntity.ok().body(assignedHours);
     }

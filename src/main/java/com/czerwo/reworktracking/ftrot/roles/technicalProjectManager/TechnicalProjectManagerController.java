@@ -58,6 +58,12 @@ public class TechnicalProjectManagerController {
                 .findAllWorkPackagesByOwnerUsername(principal.getName());
     }
 
+    @GetMapping("/work-packages/lead-engineers")
+    public List<LeadEngineerDto> getAllLeadEngineersFromYourTeam(Principal principal) {
+        return technicalProjectManagerService
+                .getAllLeadEngineersFromYourTeam(principal.getName());
+    }
+
 
     @PostMapping("/work-packages")
     public ResponseEntity<WorkPackageDto> createWorkPackage(Principal principal, @RequestBody WorkPackageDto workPackage) {
@@ -80,6 +86,8 @@ public class TechnicalProjectManagerController {
 
     @PutMapping("/work-packages/{workPackageId}")
     public ResponseEntity<WorkPackageDto>  editWorkPackage(Principal principal, @PathVariable Long workPackageId, @RequestBody WorkPackageDto workPackageDto) {
+
+        //todo conflict check
         workPackageDto.setId(workPackageId);
 
         WorkPackageDto updatedWorkPackage = technicalProjectManagerService.editWorkPackage(principal.getName(), workPackageDto);

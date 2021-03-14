@@ -46,7 +46,7 @@ public class LeadEngineerService {
     public List<WorkPackageTasksDto> findAllWorkPackagesByAssignedLeadEngineer(String username) {
         return workPackageRepository.findAllWorkPackagesByAssignedLeadEngineerWithTasks(username)
                 .stream()
-                .map((workPackage) -> workPackageTasksMapper.toDto(workPackage, workPackage.getTasks()
+                .map((workPackage) -> workPackageTasksMapper.toDto(Optional.of(workPackage), workPackage.getTasks()
                         .stream()
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList());

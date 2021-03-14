@@ -24,6 +24,12 @@ public class WorkPackageTasksDto {
 
     private List<TaskDto> tasks;
 
+    private String LeadEngineerName;
+
+    private String LeadEngineerSurname;
+
+    private String LeadEngineerUsername;
+
     public long getId() {
         return id;
     }
@@ -95,5 +101,30 @@ public class WorkPackageTasksDto {
 
     public void setTasks(List<TaskDto> tasks) {
         this.tasks = tasks;
+    }
+
+
+    public String getLeadEngineerName() {
+        return LeadEngineerName;
+    }
+
+    public void setLeadEngineerName(String leadEngineerName) {
+        LeadEngineerName = leadEngineerName;
+    }
+
+    public String getLeadEngineerSurname() {
+        return LeadEngineerSurname;
+    }
+
+    public void setLeadEngineerSurname(String leadEngineerSurname) {
+        LeadEngineerSurname = leadEngineerSurname;
+    }
+
+    public String getLeadEngineerUsername() {
+        return LeadEngineerUsername;
+    }
+
+    public void setLeadEngineerUsername(String leadEngineerUsername) {
+        LeadEngineerUsername = leadEngineerUsername;
     }
 }

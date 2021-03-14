@@ -6,7 +6,10 @@ import com.czerwo.reworktracking.ftrot.models.data.Team;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.models.exceptions.Team.NoRequestedTeamException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserInfoNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotWorkPackageOwnerException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WorkPackageSimplifiedMapper;
@@ -65,7 +68,7 @@ public class TechnicalProjectManagerService {
 
         return workPackageRepository.findAllByOwnerUsernameWithTasks(ownerUsername)
                 .stream()
-                .map((workPackage) -> workPackageTasksMapper.toDto(workPackage, workPackage.getTasks()
+                .map((workPackage) -> workPackageTasksMapper.toDto(Optional.of(workPackage), workPackage.getTasks()
                         .stream()
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList());
@@ -164,6 +167,9 @@ public class TechnicalProjectManagerService {
     public List<WorkPackageSimplifiedDto> getTopFiveWorkPackagesWithClosestDeadline(String username) {
         Pageable topFive = PageRequest.of(0, 5);
 
+
+
+
         List<WorkPackageSimplifiedDto> workPackagesDto = workPackageRepository
                 .findTop5ByAssignedTechnicalProjectManagerUsernameOrderByDeadlineAsc(username, topFive)
                 .stream()
@@ -211,4 +217,29 @@ public class TechnicalProjectManagerService {
 
         return workPackageStatusDto;
     }
+
+    public List<LeadEngineerDto> getAllLeadEngineersFromYourTeam(String username) {
+
+        Optional<ApplicationUser> userByUsername = applicationUserRepository
+                .findByUsername(username);
+
+        //todo query to get team by member username
+
+        Team team = userByUsername
+                .map(ApplicationUser::getTeam)
+                .orElseThrow(NoRequestedTeamException::new);
+
+        List<ApplicationUser> teamLeadEngineers = applicationUserRepository.findLeadEngineersWithUserInfoByTeam(team);
+        for (ApplicationUser teamLeadEngineer : teamLeadEngineers) {
+            if(teamLeadEngineer.getUserInfo() == null) throw new UserInfoNotFoundException();
+        }
+
+        return teamLeadEngineers
+                .stream()
+                .map(leadEngineer -> LeadEngineerDto.toDto(leadEngineer, leadEngineer.getUserInfo()))
+                .collect(Collectors.toList());
+
+    }
+
+
 }
