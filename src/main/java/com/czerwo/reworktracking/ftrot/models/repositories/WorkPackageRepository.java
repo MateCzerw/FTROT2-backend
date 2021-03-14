@@ -52,5 +52,16 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
     List<WorkPackage> findTop5ByTeamIdOrderByDeadlineAsc(Long id, Pageable topFive);
 
 
+    @Query("SELECT COUNT(e) " +
+            "FROM WorkPackage e " +
+            "WHERE e.assignedTechnicalProjectManager.username=?1 " +
+            "AND e.isFinished = true")
+    int countWorkPackagesWhereStatusIsFinishedAndUsernameIsOwner(String username);
+
+    @Query("SELECT COUNT(e) " +
+            "FROM WorkPackage e " +
+            "WHERE e.assignedTechnicalProjectManager.username=?1 " +
+            "AND e.isFinished = false")
+    int countWorkPackagesWhereStatusIsNotFinishedAndUsernameIsOwner(String username);
 
 }

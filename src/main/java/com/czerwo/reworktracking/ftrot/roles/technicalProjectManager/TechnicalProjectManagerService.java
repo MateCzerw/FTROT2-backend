@@ -59,7 +59,12 @@ public class TechnicalProjectManagerService {
         Optional<ApplicationUser> userByUsername = applicationUserRepository
                 .findByUsernameWithTeamAndUserInfo(username);
 
-        return UserInfoMapper.toDto(userByUsername);
+        int unfinishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsNotFinishedAndUsernameIsOwner(username);
+        int finishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsFinishedAndUsernameIsOwner(username);
+
+        return UserInfoMapper.toDto(userByUsername,unfinishedWorkPackages,finishedWorkPackages );
 
     }
 
