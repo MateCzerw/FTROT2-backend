@@ -7,6 +7,7 @@ import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Day.DayName;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Week;
+import com.czerwo.reworktracking.ftrot.models.data.WorkPackage;
 import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.TaskDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
@@ -17,12 +18,14 @@ import com.czerwo.reworktracking.ftrot.models.exceptions.User.TeamLeaderNotFound
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserIsNotTaskOwnerException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.User.UserNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.exceptions.Week.DuplicateWeekExceptionException;
+import com.czerwo.reworktracking.ftrot.models.exceptions.WorkPackage.WorkPackageNotFoundException;
 import com.czerwo.reworktracking.ftrot.models.mappers.DayTasksMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.TaskMapper;
 import com.czerwo.reworktracking.ftrot.models.mappers.WeekDayMapper;
 import com.czerwo.reworktracking.ftrot.models.repositories.DayRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.TaskRepository;
 import com.czerwo.reworktracking.ftrot.models.repositories.WeekRepository;
+import com.czerwo.reworktracking.ftrot.models.repositories.WorkPackageRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,6 +43,7 @@ public class EngineerService {
     private final DataService dataService;
     private final ApplicationUserRepository applicationUserRepository;
     private final TaskRepository taskRepository;
+    private final WorkPackageRepository workPackageRepository;
     private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
     private final TaskMapper taskMapper;
@@ -49,12 +53,13 @@ public class EngineerService {
 
     public EngineerService(DataService dataService, ApplicationUserRepository applicationUserRepository,
                            TaskRepository taskRepository,
-                           WeekRepository weekRepository,
+                           WorkPackageRepository workPackageRepository, WeekRepository weekRepository,
                            DayRepository dayRepository,
                            TaskMapper taskMapper, DayTasksMapper dayTasksMapper, WeekDayMapper weekDayMapper) {
         this.dataService = dataService;
         this.applicationUserRepository = applicationUserRepository;
         this.taskRepository = taskRepository;
+        this.workPackageRepository = workPackageRepository;
         this.weekRepository = weekRepository;
         this.dayRepository = dayRepository;
         this.taskMapper = taskMapper;
@@ -226,6 +231,7 @@ public class EngineerService {
 
     }
 
+    @Transactional
     public void editTaskStatus(String username, double status, long taskId) {
         ApplicationUser userByUsername = applicationUserRepository
                 .findByUsername(username)
@@ -236,7 +242,34 @@ public class EngineerService {
         if(!task.getAssignedEngineer().equals(userByUsername)) throw new UserIsNotTaskOwnerException();
 
         task.setStatus(status);
-
         taskRepository.save(task);
+
+
+        WorkPackage workPackage = workPackageRepository
+                .workPackageByTaskId(taskId)
+                //todo wrong exception
+                .orElseThrow(() -> new WorkPackageNotFoundException(0l));
+
+        List<Task> tasksForStatus =
+        taskRepository.findAllByWorkPackageId(workPackage.getId());
+
+        workPackage.setStatus(Math.round(recalculateWorkPackageStatus(tasksForStatus) * 100.0 )/ 100.0);
+
+    }
+
+
+    public double recalculateWorkPackageStatus(List<Task> tasks) {
+
+        double totalDuration = tasks
+                .stream()
+                .map(Task::getDuration)
+                .collect(Collectors.summingInt(value -> value.intValue()));
+        int totalWorkDone = tasks
+                .stream()
+                .map(task -> task.getStatus() * task.getDuration())
+                .collect(Collectors.summingInt(value -> value.intValue()));
+
+
+        return totalDuration != 0 ? totalWorkDone / totalDuration : 0;
     }
 }

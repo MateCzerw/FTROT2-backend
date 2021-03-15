@@ -46,4 +46,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "WHERE e.assignedEngineer.id=?1 " +
             "AND e.day =?2")
     List<Task> findAllByAssignedEngineerIdAndDay(long assignedEngineerId, Day dayByDate);
+
+    @Query("SELECT e FROM Task e " +
+            "WHERE e.workPackage.id=?1")
+    List<Task> findAllByWorkPackageId(long workPackageId);
 }

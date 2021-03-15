@@ -64,4 +64,8 @@ public interface WorkPackageRepository extends JpaRepository<WorkPackage, Long> 
             "AND e.isFinished = false")
     int countWorkPackagesWhereStatusIsNotFinishedAndUsernameIsOwner(String username);
 
+
+    @Query("SELECT e FROM WorkPackage e " +
+            "WHERE EXISTS (SELECT t FROM Task t WHERE t.id =?1 AND t.workPackage=e)")
+    Optional<WorkPackage> workPackageByTaskId(long taskId);
 }
