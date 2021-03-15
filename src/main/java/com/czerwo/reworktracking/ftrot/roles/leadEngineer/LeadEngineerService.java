@@ -177,7 +177,12 @@ public class LeadEngineerService {
         Optional<ApplicationUser> userByUsername = applicationUserRepository
                 .findByUsernameWithTeamAndUserInfo(username);
 
-        return UserInfoMapper.toDto(userByUsername);
+        int unfinishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsFinishedAndUsernameIsLeadEngineer(username);
+        int finishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsNotFinishedAndUsernameIsLeadEngineer(username);
+
+        return UserInfoMapper.toDto(userByUsername,unfinishedWorkPackages,finishedWorkPackages );
     }
 
     public List<WorkPackageSimplifiedDto> getTopFiveWorkPackageWithClosestDeadline(String username) {

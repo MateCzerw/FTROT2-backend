@@ -9,7 +9,7 @@ import java.util.Optional;
 class UserInfoMapper {
 
 
-    static UserInfoDto toDto(Optional<ApplicationUser> user){
+    static UserInfoDto toDto(Optional<ApplicationUser> user, int unfinishedWorkPackages, int finishedWorkPackages){
         UserInfoDto dto = new UserInfoDto();
         UserInfo userInfo = user.map(ApplicationUser::getUserInfo).orElseThrow(() -> new RuntimeException());
         dto.setName(userInfo.getName());
@@ -21,11 +21,11 @@ class UserInfoMapper {
                 .map(ApplicationUser::getUserInfo)
                 .map(UserInfo::getSurname)
                 .orElseThrow(() -> new RuntimeException()));
-        //todo
-        dto.setUnfinishedWorkPackages(60);
+
+        dto.setUnfinishedWorkPackages(unfinishedWorkPackages);
         dto.setJoinedAt(user.map(ApplicationUser::getUserInfo).map(UserInfo::getJoinedAt).orElseThrow(() -> new RuntimeException()));
-        //todo
-        dto.setFinishedWorkPackages(32);
+
+        dto.setFinishedWorkPackages(finishedWorkPackages);
         dto.setTeam(user.map(ApplicationUser::getTeam).map(Team::getName).orElseThrow(() -> new RuntimeException()));
 
 

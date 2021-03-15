@@ -28,7 +28,7 @@ VALUES ('ENGINEER', true, true, true, true, '$2a$10$Br0/W3sngs5hdRgkGpwzt.ZyOPIH
         'teamleader', 5, 1);
 
 UPDATE TEAM
-SET TEAM_LEADER_ID = 5
+SET TEAM_LEADER_ID = 6
 WHERE ID = 1;
 
 
