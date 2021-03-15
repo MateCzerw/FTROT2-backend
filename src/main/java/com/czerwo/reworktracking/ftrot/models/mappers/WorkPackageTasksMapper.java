@@ -36,8 +36,19 @@ public class WorkPackageTasksMapper {
         List<TaskDto> taskDtos = tasks
                 .stream()
                 .map(task -> {
-                    //todo plannedat and assigned engineer
-                    return taskMapper.toDto(task, LocalDate.now(), "Repela");
+
+                    LocalDate date = Optional.ofNullable(task)
+                            .map(Task::getDay)
+                            .map(Day::getDate)
+                            .orElseGet(() -> LocalDate.MAX);
+                    String engineerSurname = Optional.ofNullable(task)
+                            .map(Task::getAssignedEngineer)
+                            .map(ApplicationUser::getUserInfo)
+                            .map(UserInfo::getSurname)
+                            .orElseGet(() ->"Not assigned");
+
+
+                    return taskMapper.toDto(task, date, engineerSurname);
                 })
                 .collect(Collectors.toList());
 
