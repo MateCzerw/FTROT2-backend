@@ -80,6 +80,7 @@ public class WorkPackageTasksMapper {
         dto.setDescription(workPackage.map(WorkPackage::getDescription).orElseGet(() -> ""));
         dto.setName(workPackage.map(WorkPackage::getName).orElseGet(() -> ""));
         dto.setStartDate(workPackage.map(WorkPackage::getStartDate).orElseGet(() -> LocalDate.now()));
+        dto.setStatus(workPackage.map(WorkPackage::getStatus).orElseGet(() -> 0d));
         dto.setPredictedFinish(predictedDueTo);
         dto.setDeadline(workPackage.map(WorkPackage::getDeadline).orElseGet(() -> LocalDate.now()));
         dto.setLeadEngineerName(workPackage

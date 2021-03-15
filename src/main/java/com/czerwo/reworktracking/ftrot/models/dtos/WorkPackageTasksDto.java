@@ -22,6 +22,8 @@ public class WorkPackageTasksDto {
 
     private LocalDate predictedFinish;
 
+    private double status;
+
     private List<TaskDto> tasks;
 
     private String LeadEngineerName;
@@ -126,5 +128,13 @@ public class WorkPackageTasksDto {
 
     public void setLeadEngineerUsername(String leadEngineerUsername) {
         LeadEngineerUsername = leadEngineerUsername;
+    }
+
+    public double getStatus() {
+        return status;
+    }
+
+    public void setStatus(double status) {
+        this.status = status;
     }
 }
