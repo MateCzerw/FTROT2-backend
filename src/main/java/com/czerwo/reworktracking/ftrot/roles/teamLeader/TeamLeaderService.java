@@ -103,7 +103,10 @@ public class TeamLeaderService {
 
     }
 
-    public AssignTasksPanelDto getDataForAssignTasksPanelForCurrentWeek(String username, int weekNumber, int yearNumber) {
+    public AssignTasksPanelDto getDataForAssignTasksPanelForCurrentWeek(String username) {
+
+        int weekNumber = dataService.getCurrentWeekNumber();
+        int yearNumber = dataService.getCurrentYearNumber();
 
         AssignTasksPanelDto assignTasksPanelDto = new AssignTasksPanelDto();
 

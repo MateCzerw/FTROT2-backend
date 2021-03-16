@@ -52,7 +52,7 @@ public class TeamLeaderController {
 
         AssignTasksPanelDto assignTasksPanelDto =
                 teamLeaderService
-                        .getDataForAssignTasksPanelForCurrentWeek(principal.getName(), 1, 2021);
+                        .getDataForAssignTasksPanelForCurrentWeek(principal.getName());
 
         return ResponseEntity.ok().body(assignTasksPanelDto);
     }
