@@ -11,7 +11,7 @@ public class EngineerDto {
     private String firstName;
     private String lastName;
     private String picture;
-    private WeekDto weekDto;
+    private WeekDto week;
     private List<TaskDto> backlog;
 
     public long getId() {
@@ -46,12 +46,12 @@ public class EngineerDto {
         this.picture = picture;
     }
 
-    public WeekDto getWeekDto() {
-        return weekDto;
+    public WeekDto getWeek() {
+        return week;
     }
 
-    public void setWeekDto(WeekDto weekDto) {
-        this.weekDto = weekDto;
+    public void setWeek(WeekDto week) {
+        this.week = week;
     }
 
     public List<TaskDto> getBacklog() {

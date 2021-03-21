@@ -1,5 +1,7 @@
 package com.czerwo.reworktracking.ftrot.models.dtos;
 
+import java.time.LocalDate;
+
 public class TaskDto {
 
     private Long id;
@@ -8,6 +10,8 @@ public class TaskDto {
     private double duration;
     private double status;
     private String workPackageName;
+    String assignedEngineerName;
+    LocalDate plannedAt;
 
     public Long getId() {
         return id;
@@ -56,4 +60,22 @@ public class TaskDto {
     public double getStatus() {
         return status;
     }
+
+    public String getAssignedEngineerName() {
+        return assignedEngineerName;
+    }
+
+    public void setAssignedEngineerName(String assignedEngineerName) {
+        this.assignedEngineerName = assignedEngineerName;
+    }
+
+    public LocalDate getPlannedAt() {
+        return plannedAt;
+    }
+
+    public void setPlannedAt(LocalDate plannedAt) {
+        this.plannedAt = plannedAt;
+    }
+
+
 }

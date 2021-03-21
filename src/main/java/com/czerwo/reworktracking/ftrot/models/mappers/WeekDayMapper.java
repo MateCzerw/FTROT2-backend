@@ -5,7 +5,9 @@ import com.czerwo.reworktracking.ftrot.models.dtos.DayDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WeekDayMapper {
@@ -16,7 +18,11 @@ public class WeekDayMapper {
         dto.setId(week.getId());
         dto.setWeekNumber(week.getWeekNumber());
         dto.setYearNumber(week.getYearNumber());
-        dto.setDays(dayDtos);
+        dto.setDays(dayDtos
+                .stream()
+                .sorted(Comparator
+                        .comparing(DayDto::getDate,(date1,date2) -> {return date1.isAfter(date2) ? 1:-1;}))
+                .collect(Collectors.toList()));
 
         return dto;
     }

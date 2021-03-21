@@ -10,9 +10,9 @@ public class WorkPackageTasksDto {
 
     private String name;
 
-    private int taskQuantity;
+    private int tasksQuantity;
 
-    private int taskFinished;
+    private int finishedTasks;
 
     private String description;
 
@@ -22,7 +22,15 @@ public class WorkPackageTasksDto {
 
     private LocalDate predictedFinish;
 
-    private List<TaskDto> taskDtos;
+    private double status;
+
+    private List<TaskDto> tasks;
+
+    private String LeadEngineerName;
+
+    private String LeadEngineerSurname;
+
+    private String LeadEngineerUsername;
 
     public long getId() {
         return id;
@@ -40,20 +48,21 @@ public class WorkPackageTasksDto {
         this.name = name;
     }
 
-    public int getTaskQuantity() {
-        return taskQuantity;
+    public int getTasksQuantity() {
+
+        return tasksQuantity;
     }
 
-    public void setTaskQuantity(int taskQuantity) {
-        this.taskQuantity = taskQuantity;
+    public void setTasksQuantity(int tasksQuantity) {
+        this.tasksQuantity = tasksQuantity;
     }
 
-    public int getTaskFinished() {
-        return taskFinished;
+    public int getFinishedTasks() {
+        return finishedTasks;
     }
 
-    public void setTaskFinished(int taskFinished) {
-        this.taskFinished = taskFinished;
+    public void setFinishedTasks(int finishedTasks) {
+        this.finishedTasks = finishedTasks;
     }
 
     public String getDescription() {
@@ -88,11 +97,44 @@ public class WorkPackageTasksDto {
         this.predictedFinish = predictedFinish;
     }
 
-    public List<TaskDto> getTaskDtos() {
-        return taskDtos;
+    public List<TaskDto> getTasks() {
+        return tasks;
     }
 
-    public void setTaskDtos(List<TaskDto> taskDtos) {
-        this.taskDtos = taskDtos;
+    public void setTasks(List<TaskDto> tasks) {
+        this.tasks = tasks;
+    }
+
+
+    public String getLeadEngineerName() {
+        return LeadEngineerName;
+    }
+
+    public void setLeadEngineerName(String leadEngineerName) {
+        LeadEngineerName = leadEngineerName;
+    }
+
+    public String getLeadEngineerSurname() {
+        return LeadEngineerSurname;
+    }
+
+    public void setLeadEngineerSurname(String leadEngineerSurname) {
+        LeadEngineerSurname = leadEngineerSurname;
+    }
+
+    public String getLeadEngineerUsername() {
+        return LeadEngineerUsername;
+    }
+
+    public void setLeadEngineerUsername(String leadEngineerUsername) {
+        LeadEngineerUsername = leadEngineerUsername;
+    }
+
+    public double getStatus() {
+        return status;
+    }
+
+    public void setStatus(double status) {
+        this.status = status;
     }
 }

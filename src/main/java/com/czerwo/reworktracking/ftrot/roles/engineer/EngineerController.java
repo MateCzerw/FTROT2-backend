@@ -1,30 +1,30 @@
 package com.czerwo.reworktracking.ftrot.roles.engineer;
 
+import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.dtos.WeekDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/engineer")
 public class EngineerController {
 
-    EngineerService engineerService;
+    private final EngineerService engineerService;
 
-    public EngineerController(EngineerService engineerService) {
+
+    public EngineerController(EngineerService engineerService, DataService dataService) {
         this.engineerService = engineerService;
+
     }
 
 
 
     @GetMapping("/board/user-info")
     public ResponseEntity<UserInfoDto> getUserInfo(Principal principal){
-
 
         UserInfoDto userInfoDto = engineerService.getUserInfoByUsername(principal.getName());
 
@@ -34,6 +34,8 @@ public class EngineerController {
     @GetMapping("/board/tasks")
     public ResponseEntity<List<TaskSimplifyDto>> getTasksForDay(Principal principal){
 
+
+
         List<TaskSimplifyDto> tasksForDay = engineerService.getTasksForDay(principal.getName());
 
 
@@ -41,32 +43,49 @@ public class EngineerController {
     }
 
     @GetMapping("/board/graph-details")
-    public ResponseEntity<Integer> getTotalDurationOfAssignedTasksInCurrentWeek(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+    public ResponseEntity<Integer> getTotalDurationOfAssignedTasksInCurrentWeek(Principal principal){
 
         Integer assignedTasksDuration = engineerService
                 .getTotalDurationOfAssignedTasksInCurrentWeek(
-                        principal.getName(),
-                        weekNumber,
-                        yearNumber);
+                        principal.getName()
+                        );
 
         return ResponseEntity.ok().body(assignedTasksDuration);
     }
 
     @GetMapping("/tasks")
-    public ResponseEntity<WeekDto> getUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+    public ResponseEntity<WeekDto> getCurrentUserWeekWithTasks(Principal principal){
 
-        WeekDto userWeekWithTasks = engineerService.getUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+        WeekDto userWeekWithTasks = engineerService.getCurrentUserWeekWithTasks(principal.getName());
 
         return ResponseEntity.ok().body(userWeekWithTasks);
     }
 
+    @PatchMapping("/tasks/{taskId}")
+    public ResponseEntity<Void> changeTaskStatus(Principal principal, @PathVariable long taskId, @RequestParam double status){
 
-    // LIST OF TASKS TO DO
+        engineerService.editTaskStatus(principal.getName(), status, taskId);
 
-    // TO SET THAT TASK IS DONE
+        return ResponseEntity.noContent().build();
+    }
 
-    // TO SET THAT TASK IS NOT DONE
 
+    @GetMapping("/tasks/next-week")
+    public ResponseEntity<WeekDto> getNextUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+
+        WeekDto nextUserWeekWithTasks = engineerService.getNextUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+
+        return ResponseEntity.ok().body(nextUserWeekWithTasks);
+    }
+
+    @GetMapping("/tasks/previous-week")
+    public ResponseEntity<WeekDto> getPreviousUserWeekWithTasks(Principal principal, @RequestParam int weekNumber, @RequestParam int yearNumber){
+
+        WeekDto previousUserWeekWithTasks = engineerService.getPreviousUserWeekWithTasks(principal.getName(), weekNumber, yearNumber);
+
+        return ResponseEntity.ok().body(previousUserWeekWithTasks);
+
+    }
 
 
 }

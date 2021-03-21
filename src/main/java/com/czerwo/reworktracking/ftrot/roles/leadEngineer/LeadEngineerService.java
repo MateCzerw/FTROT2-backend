@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -45,13 +46,14 @@ public class LeadEngineerService {
     public List<WorkPackageTasksDto> findAllWorkPackagesByAssignedLeadEngineer(String username) {
         return workPackageRepository.findAllWorkPackagesByAssignedLeadEngineerWithTasks(username)
                 .stream()
-                .map((workPackage) -> workPackageTasksMapper.toDto(workPackage, workPackage.getTasks()
+                .map((workPackage) -> workPackageTasksMapper.toDto(Optional.of(workPackage), workPackage.getTasks()
                         .stream()
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList());
 
     }
 
+    @Transactional
     public void deleteTask(String username, Long workPackageId, Long taskId) {
 
         ApplicationUser userByUsername = applicationUserRepository
@@ -62,16 +64,33 @@ public class LeadEngineerService {
                 .findByIdWithAssignedLeadEngineerAndTasks(workPackageId)
                 .orElseThrow(() -> new RuntimeException());
 
+
+
         //todo to check if user is an assigned lead engineer
         if (!workPackage.getAssignedLeadEngineer().getUsername().equals(username)) throw new RuntimeException();
         //todo to check if task belongs to workpackage
         boolean isTaskWithinWorkPackage = workPackage.getTasks().stream().anyMatch(task -> task.getId() == taskId);
 
-        if (!isTaskWithinWorkPackage) throw new RuntimeException();
+        Task taskById = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException());
+
+        List<Task> tasksForStatus = taskRepository
+                .findAllByWorkPackageId(workPackageId)
+                .stream()
+                .filter(task -> task.getId() != taskId)
+                .collect(Collectors.toList());
+
+
+        workPackage.removeTask(taskById);
+        workPackage.setStatus(Math.round(recalculateWorkPackageStatus(tasksForStatus) * 100.0 )/ 100.0);
+        workPackageRepository.save(workPackage);
 
         taskRepository.deleteById(taskId);
+
+
+
     }
 
+    @Transactional
     public TaskDto createTask(String leadEngineerUsername, TaskDto taskDto, long workPackageId) {
 
         WorkPackage workPackageById = workPackageRepository
@@ -93,10 +112,19 @@ public class LeadEngineerService {
         taskEntity.setWorkPackage(workPackageById);
         taskEntity.setStatus(0);
 
+        List<Task> tasksForStatus = taskRepository
+                .findAllByWorkPackageId(workPackageId);
+
+        tasksForStatus.add(taskEntity);
+
+        workPackageById.setStatus(Math.round(recalculateWorkPackageStatus(tasksForStatus) * 100.0 )/ 100.0);
+//        workPackageRepository.save(workPackageById);
+
         return mapAndSave(taskEntity);
 
     }
 
+    @Transactional
     public TaskDto editTask(String leadEngineerUsername, TaskDto taskDto, Long workPackageId) {
         WorkPackage workPackageById = workPackageRepository
                 .findByIdWithAssignedLeadEngineerAndTasks(workPackageId)
@@ -116,10 +144,22 @@ public class LeadEngineerService {
 
         if (!isTaskAssignedToWorkPackage) throw new RuntimeException();
 
+        List<Task> tasksForStatus = taskRepository
+                .findAllByWorkPackageId(workPackageId);
+
+
         Task entity = taskRepository.findById(taskDto.getId()).orElseThrow(() -> new RuntimeException());
         entity.setName(taskDto.getName());
+
+        double newStatus = Math.round((entity.getDuration() * entity.getStatus())/taskDto.getDuration() * 100.0 ) / 100.0;
+        entity.setStatus(newStatus > 1 ? 1 : newStatus);
         entity.setDuration(taskDto.getDuration());
         entity.setDescription(taskDto.getDescription());
+
+
+        workPackageById.setStatus(Math.round(recalculateWorkPackageStatus(tasksForStatus) * 100.0 )/ 100.0);
+        //workPackageRepository.save(workPackageById);
+
 
         return mapAndSave(entity);
 
@@ -137,10 +177,15 @@ public class LeadEngineerService {
         Optional<ApplicationUser> userByUsername = applicationUserRepository
                 .findByUsernameWithTeamAndUserInfo(username);
 
-        return UserInfoMapper.toDto(userByUsername);
+        int unfinishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsFinishedAndUsernameIsLeadEngineer(username);
+        int finishedWorkPackages = workPackageRepository
+                .countWorkPackagesWhereStatusIsNotFinishedAndUsernameIsLeadEngineer(username);
+
+        return UserInfoMapper.toDto(userByUsername,unfinishedWorkPackages,finishedWorkPackages );
     }
 
-    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackageWithClosestDeadline(String username){
+    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackageWithClosestDeadline(String username) {
 
         Pageable topFive = PageRequest.of(0, 5);
 
@@ -185,10 +230,28 @@ public class LeadEngineerService {
                 .count();
 
 
-        workPackageStatusDto.setOnTime((int)onTimeWorkPackages);
+        workPackageStatusDto.setOnTime((int) onTimeWorkPackages);
         workPackageStatusDto.setStopped((int) stoppedWorkPackages);
         workPackageStatusDto.setDelayed((int) delayedWorkPackages);
 
         return workPackageStatusDto;
     }
+
+
+    public double recalculateWorkPackageStatus(List<Task> tasks) {
+
+        double totalDuration = tasks
+                .stream()
+                .map(Task::getDuration)
+                .collect(Collectors.summingInt(value -> value.intValue()));
+        int totalWorkDone = tasks
+                .stream()
+                .map(task -> task.getStatus() * task.getDuration())
+                .collect(Collectors.summingInt(value -> value.intValue()));
+
+
+        return totalDuration != 0 ? totalWorkDone / totalDuration : 0;
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.czerwo.reworktracking.ftrot.roles.technicalProjectManager;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageSimplifiedDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageStatusDto;
 import com.czerwo.reworktracking.ftrot.models.dtos.WorkPackageTasksDto;
+import com.czerwo.reworktracking.ftrot.roles.engineer.TaskSimplifyDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -57,6 +58,12 @@ public class TechnicalProjectManagerController {
                 .findAllWorkPackagesByOwnerUsername(principal.getName());
     }
 
+    @GetMapping("/work-packages/lead-engineers")
+    public List<LeadEngineerDto> getAllLeadEngineersFromYourTeam(Principal principal) {
+        return technicalProjectManagerService
+                .getAllLeadEngineersFromYourTeam(principal.getName());
+    }
+
 
     @PostMapping("/work-packages")
     public ResponseEntity<WorkPackageDto> createWorkPackage(Principal principal, @RequestBody WorkPackageDto workPackage) {
@@ -79,11 +86,16 @@ public class TechnicalProjectManagerController {
 
     @PutMapping("/work-packages/{workPackageId}")
     public ResponseEntity<WorkPackageDto>  editWorkPackage(Principal principal, @PathVariable Long workPackageId, @RequestBody WorkPackageDto workPackageDto) {
+
+        //todo conflict check
         workPackageDto.setId(workPackageId);
 
         WorkPackageDto updatedWorkPackage = technicalProjectManagerService.editWorkPackage(principal.getName(), workPackageDto);
 
         return ResponseEntity.ok().body(updatedWorkPackage);
     }
+
+
+
 
 }

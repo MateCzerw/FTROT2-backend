@@ -2,6 +2,7 @@ package com.czerwo.reworktracking.ftrot.roles.teamLeader;
 
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUser;
 import com.czerwo.reworktracking.ftrot.auth.ApplicationUserRepository;
+import com.czerwo.reworktracking.ftrot.models.DataService;
 import com.czerwo.reworktracking.ftrot.models.data.Day.Day;
 import com.czerwo.reworktracking.ftrot.models.data.Task;
 import com.czerwo.reworktracking.ftrot.models.data.Team;
@@ -20,9 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,12 +37,13 @@ public class TeamLeaderService {
     private final WeekRepository weekRepository;
     private final DayRepository dayRepository;
     private final EngineerService engineerService;
+    private final DataService dataService;
     private final DayTasksMapper dayTasksMapper;
     private final TaskMapper taskMapper;
     private final WeekDayMapper weekDayMapper;
 
 
-    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository, TaskRepository taskRepository, WeekRepository weekRepository, DayRepository dayRepository, EngineerService engineerService, DayTasksMapper dayTasksMapper, TaskMapper taskMapper, WeekDayMapper weekDayMapper) {
+    public TeamLeaderService(ApplicationUserRepository applicationUserRepository, WorkPackageRepository workPackageRepository, WorkPackageSimplifiedMapper workPackageSimplifiedMapper, TeamRepository teamRepository, TaskRepository taskRepository, WeekRepository weekRepository, DayRepository dayRepository, EngineerService engineerService, DataService dataService, DayTasksMapper dayTasksMapper, TaskMapper taskMapper, WeekDayMapper weekDayMapper) {
         this.applicationUserRepository = applicationUserRepository;
         this.workPackageRepository = workPackageRepository;
         this.workPackageSimplifiedMapper = workPackageSimplifiedMapper;
@@ -50,6 +52,7 @@ public class TeamLeaderService {
         this.weekRepository = weekRepository;
         this.dayRepository = dayRepository;
         this.engineerService = engineerService;
+        this.dataService = dataService;
         this.dayTasksMapper = dayTasksMapper;
         this.taskMapper = taskMapper;
         this.weekDayMapper = weekDayMapper;
@@ -64,7 +67,7 @@ public class TeamLeaderService {
 
     }
 
-    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackagesWithClosestDeadline(String username){
+    public List<WorkPackageSimplifiedDto> getTopFiveWorkPackagesWithClosestDeadline(String username) {
 
 
         Team team = teamRepository.findByTeamLeaderUsername(username).orElseThrow(() -> new RuntimeException());
@@ -80,14 +83,17 @@ public class TeamLeaderService {
         return workPackagesDto;
     }
 
-    public int getAssignedHoursForCurrentWeek(String username, int week, int year) {
+    public int getAssignedHoursForCurrentWeek(String username) {
+
+        int currentWeek = dataService.getCurrentWeekNumber();
+        int currentYearNumber = dataService.getCurrentYearNumber();
 
         List<ApplicationUser> engineers = applicationUserRepository
                 .findEngineersAndLeadEngineersFromTeamByTeamLeaderUsername(username);
 
         int assignedHours = engineers
                 .stream()
-                .map(e -> taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(e.getId(), week, year))
+                .map(e -> taskRepository.sumTasksByAssignerEngineerIdAndWeekAndYear(e.getId(), currentWeek, currentYearNumber))
                 .collect(Collectors.summingInt(Integer::intValue));
 
 
@@ -95,7 +101,10 @@ public class TeamLeaderService {
 
     }
 
-    public AssignTasksPanelDto getDataForAssignTasksPanelForCurrentWeek(String username, int weekNumber, int yearNumber) {
+    public AssignTasksPanelDto getDataForAssignTasksPanelForCurrentWeek(String username) {
+
+        int weekNumber = dataService.getCurrentWeekNumber();
+        int yearNumber = dataService.getCurrentYearNumber();
 
         AssignTasksPanelDto assignTasksPanelDto = new AssignTasksPanelDto();
 
@@ -105,7 +114,7 @@ public class TeamLeaderService {
                 findEngineersAndLeadEngineersWithUserInfoByTeamId(teamByByLeaderUsername.getId());
 
         //for each generate engineer dto
-        for (ApplicationUser engineer: engineers) {
+        for (ApplicationUser engineer : engineers) {
 
             EngineerDto engineerDto = new EngineerDto();
 
@@ -120,57 +129,62 @@ public class TeamLeaderService {
 
             WeekDto weekDtoForEngineer = createWeekDtoForEngineer(engineer, week);
 
-            engineerDto.setWeekDto(weekDtoForEngineer);
+            engineerDto.setWeek(weekDtoForEngineer);
 
             List<Task> tasksFromBacklogByEngineerId = taskRepository.findTasksFromBacklogByEngineerId(engineer.getId());
 
             engineerDto.setBacklog(
                     tasksFromBacklogByEngineerId
                             .stream()
-                            .map(taskMapper::toDto)
+                            .map(task -> {
+                                //todo plannedat and assigned engineer
+                                return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                            })
                             .collect(Collectors.toList())
             );
 
             assignTasksPanelDto.getEngineers().add(engineerDto);
-            }
+        }
 
         assignTasksPanelDto.setUnassignedTasks(
                 taskRepository
                         .findUnassignedTasksByTeamId(teamByByLeaderUsername.getId())
                         .stream()
-                        .map(taskMapper::toDto)
+                        .map(task -> {
+                            //todo plannedat and assigned engineer
+                            return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                        })
                         .collect(Collectors.toList())
         );
 
 
         return assignTasksPanelDto;
-        }
+    }
 
 
-
-
-
-
-
-
-    private WeekDto createWeekDtoForEngineer(ApplicationUser engineer, Week week){
+    private WeekDto createWeekDtoForEngineer(ApplicationUser engineer, Week week) {
 
 
         List<Day> daysByWeekId = dayRepository.findAllByWeekId(week.getId());
         List<DayDto> dayDtos = new LinkedList<>();
 
-        for (Day day: daysByWeekId) {
+        for (Day day : daysByWeekId) {
             List<TaskDto> taskDtos = taskRepository.findAllByDayId(day.getId())
                     .stream()
-                    .map(task -> taskMapper.toDto(task))
+                    .map(task -> {
+                        //todo plannedat and assigned engineer
+                        return taskMapper.toDto(task, LocalDate.now(), "Repela");
+                    })
                     .collect(Collectors.toList());
 
             DayDto dayDto = dayTasksMapper.toDto(day, taskDtos);
             dayDtos.add(dayDto);
         }
 
-        return weekDayMapper.toDto(week,dayDtos);
-    };
+        return weekDayMapper.toDto(week, dayDtos);
+    }
+
+    ;
 
     public WeekDto getWeekWithTasksForEngineerByEngineerId(String username, int weekNumber, int yearNumber, long engineerId) {
 
@@ -194,5 +208,82 @@ public class TeamLeaderService {
 
         return createWeekDtoForEngineer(engineer, week);
     }
+
+    @Transactional
+    public void modifyTaskAssignment(String teamLeaderName, AssignTaskDto assignTaskDto, long taskId) {
+
+        ApplicationUser teamLeader = applicationUserRepository
+                .findByUsername(teamLeaderName)
+                .orElseThrow(() -> new RuntimeException());
+
+        Team team = teamLeader.getTeam();
+
+        Task task = taskRepository
+                .findById(taskId)
+                .orElseThrow(() -> new RuntimeException());
+
+        if (assignTaskDto.isInBacklog() && assignTaskDto.isInUnfinishedTasks()) throw new RuntimeException();
+
+
+        if (assignTaskDto.isInBacklog()) {
+
+            //todo check if assignedEngineer belongs to TeamLeaderTeam
+            ApplicationUser assignedEngineer = applicationUserRepository
+                    .findById(assignTaskDto.getEngineerId())
+                    .orElseThrow(() -> new RuntimeException());
+
+
+            task.setDay(null);
+            task.setAssignedEngineer(assignedEngineer);
+            task.setSorting(assignTaskDto.getSorting());
+            replaceSorting();
+            taskRepository.save(task);
+            return;
+
+        }
+
+        if (assignTaskDto.isInUnfinishedTasks()) {
+            task.setDay(null);
+            task.setAssignedEngineer(null);
+            task.setSorting(assignTaskDto.getSorting());
+            replaceSorting();
+            taskRepository.save(task);
+            return;
+        }
+
+
+        //todo check if there is day in assignTaskDto
+        Day day = dayRepository
+                .findById(assignTaskDto.getDayId())
+                .orElseThrow(() -> new RuntimeException());
+        //todo check if day belongs to teamleader team user
+
+        Week week = weekRepository
+                .findWeekByDayId(day.getId())
+                .orElseThrow(() -> new RuntimeException());
+
+        ApplicationUser assignedEngineer = applicationUserRepository
+                .findById(assignTaskDto.getEngineerId())
+                .orElseThrow(() -> new RuntimeException());
+
+        if (!week.getUser().equals(assignedEngineer)) throw new RuntimeException();
+
+        task.setAssignedEngineer(assignedEngineer);
+        task.setDay(day);
+        task.setSorting(assignTaskDto.getSorting());
+        replaceSorting();
+        taskRepository.save(task);
+
+
+    }
+
+
+    private void replaceSorting() {
+        //todo
+
+    }
+
+
+
 
 }
