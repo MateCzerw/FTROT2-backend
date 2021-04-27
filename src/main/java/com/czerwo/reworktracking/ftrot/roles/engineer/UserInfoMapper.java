@@ -39,7 +39,9 @@ class UserInfoMapper {
                 .map(Team::getName)
                 .orElseThrow(() -> new TeamNotFoundException()));
 
-
+        dto.setPictureUrl(user.map(ApplicationUser::getUserInfo)
+                .map(UserInfo::getPictureUrl)
+                .orElseThrow(() -> new RuntimeException()));
         return dto;
     }
 }

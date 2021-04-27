@@ -1,10 +1,10 @@
 INSERT INTO USER_INFO(NAME, SURNAME, EMAIL, JOINED_AT, PICTURE_URL)
-VALUES ('Agnieszka', 'Leszczuk', 'TEST1@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('Marek', 'Repeła', 'TEST2@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('Maciej', 'Pszczoła', 'TEST3@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('Mateusz', 'Czerwiński', 'TEST4@GMAIL.COM', '2020-11-01', 'www.test.com'),
-       ('Wojciech', 'Zabiegło', 'TEST5@GMAIL.COM', '2020-11-01', 'www.test.com'),
-        ('Bartosz', 'Kozłowski', 'TEST6@GMAIL.COM', '2020-11-01', 'www.test.com');
+VALUES ('Agnieszka', 'Leszczuk', 'TEST1@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+       ('Marek', 'Repeła', 'TEST2@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+       ('Maciej', 'Pszczoła', 'TEST3@GMAIL.COM', '2020-11-01', 'http://res.cloudinary.com/dxf3p6flq/image/upload/v1616167648/uhd4fvlfrqxxuu7lr5of.jpg'),
+       ('Mateusz', 'Czerwiński', 'TEST4@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+       ('Wojciech', 'Zabiegło', 'TEST5@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+        ('Bartosz', 'Kozłowski', 'TEST6@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo');
 
 
 INSERT INTO TEAM(NAME)

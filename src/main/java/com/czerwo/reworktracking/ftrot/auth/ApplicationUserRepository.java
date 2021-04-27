@@ -22,6 +22,11 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
 
     @Query("SELECT e FROM ApplicationUser e " +
             "JOIN FETCH e.userInfo " +
+            "WHERE e.username=?1")
+    Optional<ApplicationUser> findByUsernameWithUserInfo(String username);
+
+    @Query("SELECT e FROM ApplicationUser e " +
+            "JOIN FETCH e.userInfo " +
             "WHERE e.team=:team " +
             "AND e.username=:#{#team.teamLeader.username}")
     Optional<ApplicationUser> findTeamLeaderWithUserInfoByTeam(@Param("team") Team team);

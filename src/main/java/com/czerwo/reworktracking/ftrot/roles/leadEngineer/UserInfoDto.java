@@ -12,6 +12,7 @@ class UserInfoDto {
     private int unfinishedWorkPackages;
     private String supervisor;
     private LocalDate joinedAt;
+    private String pictureUrl;
 
 
     public UserInfoDto() {
@@ -79,5 +80,13 @@ class UserInfoDto {
 
     public void setJoinedAt(LocalDate joinedAt) {
         this.joinedAt = joinedAt;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

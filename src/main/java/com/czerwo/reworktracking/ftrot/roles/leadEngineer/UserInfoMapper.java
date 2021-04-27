@@ -28,6 +28,9 @@ class UserInfoMapper {
         dto.setFinishedWorkPackages(finishedWorkPackages);
         dto.setTeam(user.map(ApplicationUser::getTeam).map(Team::getName).orElseThrow(() -> new RuntimeException()));
 
+        dto.setPictureUrl(user.map(ApplicationUser::getUserInfo)
+                .map(UserInfo::getPictureUrl)
+                .orElseThrow(() -> new RuntimeException()));
 
         return dto;
     }
