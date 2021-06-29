@@ -1,10 +1,10 @@
 INSERT INTO USER_INFO(NAME, SURNAME, EMAIL, JOINED_AT, PICTURE_URL)
-VALUES ('Agnieszka', 'Leszczuk', 'TEST1@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
-       ('Marek', 'Repeła', 'TEST2@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
-       ('Maciej', 'Pszczoła', 'TEST3@GMAIL.COM', '2020-11-01', 'http://res.cloudinary.com/dxf3p6flq/image/upload/v1616167648/uhd4fvlfrqxxuu7lr5of.jpg'),
+VALUES ('Agnieszka', 'Kowalska', 'TEST1@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+       ('Marek', 'Jasiński', 'TEST2@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+       ('Maciej', 'Lewandowski', 'TEST3@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
        ('Mateusz', 'Czerwiński', 'TEST4@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
-       ('Wojciech', 'Zabiegło', 'TEST5@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
-        ('Bartosz', 'Kozłowski', 'TEST6@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo');
+       ('Wojciech', 'Nowak', 'TEST5@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo'),
+        ('Bartosz', 'Zieliński', 'TEST6@GMAIL.COM', '2020-11-01', 'https://yt3.ggpht.com/yti/ANoDKi6wK_UXTj-paYQq980Ia30B623dBP5hTFc9Fnsciw=s88-c-k-c0x00ffffff-no-rj-mo');
 
 
 INSERT INTO TEAM(NAME)
@@ -43,20 +43,20 @@ VALUES ('LOREM IPSUM', 'DTNA', 3, 4, 1, '2020-11-01', '2021-01-01', TRUE, 1),
        ('LOREM IPSUM', 'Volvo', 3, 4, 1, '2020-11-01', '2021-07-01', FALSE, 0);
 
 INSERT INTO WEEK(USER_ID, WEEK_NUMBER, YEAR_NUMBER)
-VALUES (1, 10, 2021),
-       (2, 10, 2021);
+VALUES (1, 26, 2021),
+       (2, 26, 2021);
 
 INSERT INTO DAY(DATE, DAY_NAME, WEEK_ID)
-VALUES ('2021-03-08', 'MONDAY', 1),
-       ('2021-03-09', 'TUESDAY', 1),
-       ('2021-03-10', 'WEDNESDAY', 1),
-       ('2021-03-11', 'THURSDAY', 1),
-       ('2021-03-12', 'FRIDAY', 1),
-       ('2021-03-08', 'MONDAY', 2),
-       ('2021-03-09', 'TUESDAY', 2),
-       ('2021-03-10', 'WEDNESDAY', 2),
-       ('2021-03-11', 'THURSDAY', 2),
-       ('2021-03-12', 'FRIDAY', 2);
+VALUES ('2021-06-28', 'MONDAY', 1),
+       ('2021-06-29', 'TUESDAY', 1),
+       ('2021-06-30', 'WEDNESDAY', 1),
+       ('2021-07-01', 'THURSDAY', 1),
+       ('2021-07-02', 'FRIDAY', 1),
+       ('2021-06-28', 'MONDAY', 2),
+       ('2021-06-29', 'TUESDAY', 2),
+       ('2021-06-30', 'WEDNESDAY', 2),
+       ('2021-07-01', 'THURSDAY', 2),
+       ('2021-07-02', 'FRIDAY', 2);
 
 INSERT INTO TASK(DESCRIPTION, DURATION, NAME, WORK_PACKAGE_ID, STATUS, ASSIGNED_ENGINEER_ID, DAY_ID, SORTING)
 VALUES ('LOREM IPSUM', 1, 'CAD', 1, 1, 1, 1,1),
