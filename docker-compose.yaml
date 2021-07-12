@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  mysqldb:
+    image: mysql
+    container_name: mysqldb
+    volumes:
+      - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'pass'
+  jms:
+    image: vromero/activemq-artemis
+    container_name: jms
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+    depends_on:
+      - mysqldb
+  ftror:
+    image: ftror:0.0.1-SNAPSHOT
+    container_name: ftrot
+    mem_limit: 700m
+    ports:
+      - "8081:8081"
+    depends_on:
+      - jms
+      - mysqldb
+    restart: on-failure
+    environment:
+      SPRING_ARTEMIS_HOST: jms
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/credit
