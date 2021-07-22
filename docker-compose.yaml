@@ -18,8 +18,8 @@ services:
       - "61616:61616"
     depends_on:
       - mysqldb
-  ftror:
-    image: ftror:0.0.1-SNAPSHOT
+  ftrot:
+    image: ftrot:0.0.1-SNAPSHOT
     container_name: ftrot
     mem_limit: 700m
     ports:

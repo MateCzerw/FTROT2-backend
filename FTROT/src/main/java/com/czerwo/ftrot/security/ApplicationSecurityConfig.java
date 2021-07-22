@@ -57,6 +57,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/technical-project-manager/**").hasRole(ApplicationUserRole.TECHNICAL_PROJECT_MANAGER.name())
                 .antMatchers("/api/v1/lead-engineer/**").hasRole(ApplicationUserRole.LEAD_ENGINEER.name())
                 .antMatchers("/api/v1/team-leader/**").hasRole(ApplicationUserRole.TEAM_LEADER.name())
+                .antMatchers("/api/v1/test/**").permitAll()
                 .anyRequest()
                 .authenticated();
 
